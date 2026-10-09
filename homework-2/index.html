@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Homework 2 — Ethereum Wallet Pipeline | CryptoLab</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body>
+<header class="site-header"><a class="brand" href="../"><span class="brand-mark">C</span> CryptoLab</a><nav><a href="../">Home</a><a href="../homework-1/">Homework 1</a><a href="./">Homework 2</a></nav></header>
+<main>
+<section class="page-hero"><div class="breadcrumbs"><a href="../">CryptoLab</a> / Homework 2</div><p class="eyebrow">EXPERIMENT 02 · WALLET STANDARDS</p><h1>From recovery phrase<br><span class="gradient-text">to Ethereum address.</span></h1><p>A wallet uses several distinct standards because key management, public-key cryptography, hashing and error detection solve different problems. Select each stage to inspect its purpose.</p></section>
+<section class="panel"><h2>01 / Explore the pipeline</h2><p>Select a stage. This is a conceptual walkthrough of the standard process, not a wallet implementation and not a request for real secret material.</p><div class="layout-grid">
+  <div class="pipeline" id="pipeline">
+    <button class="pipeline-step active" data-id="bip39"><span class="step-num">01</span><span><strong>BIP-39</strong><small>Mnemonic → seed</small></span><span class="arrow">↗</span></button>
+    <button class="pipeline-step" data-id="bip32"><span class="step-num">02</span><span><strong>BIP-32</strong><small>Hierarchical key derivation</small></span><span class="arrow">↗</span></button>
+    <button class="pipeline-step" data-id="bip44"><span class="step-num">03</span><span><strong>BIP-44</strong><small>Derivation path convention</small></span><span class="arrow">↗</span></button>
+    <button class="pipeline-step" data-id="secp"><span class="step-num">04</span><span><strong>secp256k1</strong><small>Private key → public key</small></span><span class="arrow">↗</span></button>
+    <button class="pipeline-step" data-id="keccak"><span class="step-num">05</span><span><strong>Keccak-256</strong><small>Public key → address bytes</small></span><span class="arrow">↗</span></button>
+    <button class="pipeline-step" data-id="eip55"><span class="step-num">06</span><span><strong>EIP-55</strong><small>Mixed-case checksum encoding</small></span><span class="arrow">↗</span></button>
+  </div>
+  <div class="panel detail-panel" id="detailPanel" style="margin:0"><span class="tag" id="detailTag">KEY MANAGEMENT</span><h2 id="detailTitle" style="margin-top:14px">BIP-39 — Mnemonic and seed</h2><p id="detailText"></p><h3>Input → output</h3><div class="step-box" id="detailIO"></div><p id="detailCaveat"></p></div>
+</div></section>
+<section class="layout-grid">
+  <div class="panel"><h2>02 / Concepts that must not be confused</h2><div class="table-wrap"><table><thead><tr><th>Concept</th><th>Purpose</th><th>In this pipeline</th></tr></thead><tbody>
+  <tr><td>Key generation</td><td>Create initial secret material, typically from randomness.</td><td>Wallet setup / mnemonic entropy.</td></tr>
+  <tr><td>Key derivation</td><td>Deterministically derive keys from existing secret material.</td><td>BIP-32 plus a path convention such as BIP-44.</td></tr>
+  <tr><td>Public-key cryptography</td><td>Relate a private key to a public key and support signatures.</td><td>secp256k1.</td></tr>
+  <tr><td>Hashing</td><td>Map input data to a fixed-size digest.</td><td>Keccak-256.</td></tr>
+  <tr><td>Checksum</td><td>Help detect common transcription errors.</td><td>EIP-55.</td></tr>
+  <tr><td>Encoding</td><td>Represent data in a specified textual format.</td><td>Hexadecimal; EIP-55 casing convention.</td></tr>
+  </tbody></table></div></div>
+  <div class="panel"><h2>03 / The derivation path</h2><p class="mono result">m/44'/60'/0'/0/0</p><ul><li><strong>m</strong>: master node.</li><li><strong>44'</strong>: BIP-44 purpose.</li><li><strong>60'</strong>: registered coin type for Ethereum.</li><li><strong>0'</strong>: account index zero.</li><li><strong>0</strong>: external/receiving chain.</li><li><strong>0</strong>: first address index.</li></ul><p>Wallets may support different paths or account models. This is a common Ethereum path, not a universal guarantee for every wallet.</p></div>
+</section>
+<section class="panel"><h2>04 / Historical context</h2><p>Approximate order of selected milestones. The dates describe standards or public introduction, not necessarily the first use of every underlying idea.</p><div class="timeline">
+  <div class="timeline-item"><strong>1977</strong><b>RSA</b><p>Public-key cryptography became practical through a widely influential public-key algorithm.</p></div>
+  <div class="timeline-item"><strong>2001</strong><b>SHA-2 / SHA-512</b><p>NIST standardized the SHA-2 family, including SHA-512.</p></div>
+  <div class="timeline-item"><strong>2012</strong><b>BIP-32</b><p>Bitcoin Improvement Proposal for hierarchical deterministic wallets.</p></div>
+  <div class="timeline-item"><strong>2013</strong><b>BIP-39</b><p>Mnemonic code for representing wallet recovery material and deriving a seed.</p></div>
+  <div class="timeline-item"><strong>2014</strong><b>BIP-44</b><p>Convention for multi-account hierarchical deterministic wallets.</p></div>
+  <div class="timeline-item"><strong>2015</strong><b>SHA-3</b><p>NIST published FIPS 202, standardizing SHA-3 based on the Keccak design.</p></div>
+  <div class="timeline-item"><strong>2016</strong><b>EIP-55</b><p>Ethereum mixed-case checksum encoding was proposed to improve address typo detection.</p></div>
+</div></section>
+<section class="layout-grid">
+  <div class="panel"><h2>05 / Keccak-256 is not SHA3-256</h2><p>Keccak was selected as the basis for SHA-3, but Ethereum's Keccak-256 uses a different padding/domain-separation convention from standardized SHA3-256. They both produce 256-bit digests, but the outputs are not interchangeable.</p><div class="notice">Implementation warning: a library function named <code>sha3_256</code> is not automatically correct for Ethereum address derivation. Use an implementation explicitly documented as Ethereum Keccak-256.</div></div>
+  <div class="panel"><h2>06 / What EIP-55 does—and does not do</h2><p>EIP-55 hashes the lowercase hexadecimal address text with Keccak-256 and uses the hash nibbles to decide which alphabetic address characters become uppercase.</p><ul><li>It helps detect many typing errors.</li><li>It does not encrypt or hide the address.</li><li>It does not change the underlying 20-byte address.</li><li>It is not a digital signature and does not prove ownership.</li></ul><p>Specification example: <a class="text-link" href="https://eips.ethereum.org/EIPS/eip-55" target="_blank" rel="noreferrer">EIP-55 test cases ↗</a></p></div>
+</section>
+<section class="panel"><h2>07 / Statistical properties and design goals</h2><div class="table-wrap"><table><thead><tr><th>Primitive</th><th>Relevant property</th><th>Important limitation</th></tr></thead><tbody>
+<tr><td>BIP-39 / BIP-32</td><td>Deterministic reproduction of seed-derived keys.</td><td>Security depends on entropy, passphrase handling and secret protection.</td></tr>
+<tr><td>secp256k1</td><td>Public key is deterministically derived from private scalar.</td><td>Security relies on the elliptic-curve discrete logarithm problem and correct implementation.</td></tr>
+<tr><td>Keccak-256</td><td>Fixed 256-bit output; designed for preimage and collision resistance.</td><td>Hashing does not itself provide secrecy or prove identity.</td></tr>
+<tr><td>EIP-55</td><td>Mixed-case pattern can detect many transcription errors.</td><td>It is an error-detection convention, not a cryptographic authentication mechanism.</td></tr>
+</tbody></table></div><p>Different components have different statistical and security goals. A visually uniform set of outputs alone is not proof of cryptographic security; security analysis also depends on the construction, threat model and known attack resistance.</p></section>
+<section class="panel"><h2>References</h2><div class="reference-list">
+<a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noreferrer">BIP-32 specification ↗</a>
+<a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki" target="_blank" rel="noreferrer">BIP-39 specification ↗</a>
+<a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki" target="_blank" rel="noreferrer">BIP-44 specification ↗</a>
+<a href="https://eips.ethereum.org/EIPS/eip-55" target="_blank" rel="noreferrer">EIP-55 specification ↗</a>
+<a href="https://csrc.nist.gov/pubs/fips/202/final" target="_blank" rel="noreferrer">NIST FIPS 202 ↗</a>
+<a href="https://www.secg.org/sec2-v2.pdf" target="_blank" rel="noreferrer">SEC 2 parameters ↗</a>
+</div></section>
+<section class="callout"><span class="callout-icon">!</span><div><h3>Privacy and security</h3><p>This page is a conceptual guide. It does not generate a wallet or calculate a real address. Never paste a real recovery phrase or private key into a website for a homework exercise.</p></div></section>
+</main>
+<footer><span>CryptoLab · Homework 2</span><span><a href="../homework-1/">← Return to Homework 1</a></span></footer>
+<script src="script.js"></script>
+</body></html>

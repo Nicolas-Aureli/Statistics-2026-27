@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Homework 1 — Elliptic Curve Lab | CryptoLab</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header"><a class="brand" href="../"><span class="brand-mark">C</span> CryptoLab</a><nav><a href="../">Home</a><a href="./">Homework 1</a><a href="../homework-2/">Homework 2</a></nav></header>
+<main>
+  <section class="page-hero"><div class="breadcrumbs"><a href="../">CryptoLab</a> / Homework 1</div><p class="eyebrow">EXPERIMENT 01 · ELLIPTIC CURVE CRYPTOGRAPHY</p><h1>Scalar multiplication,<br><span class="gradient-text">one step at a time.</span></h1><p>Explore the toy curve y² = x³ + 7 (mod 17). The point G = (1, 5) is the base point, and the public point is Q = kG. Every result below is computed in your browser using finite-field arithmetic.</p></section>
+  <div class="layout-grid">
+    <div>
+      <section class="panel"><h2>01 / Point explorer</h2><p>Change the private scalar k, then step through the additions. The default value k = 6 follows the assignment.</p>
+        <div class="controls"><div class="field"><label for="scalar">Private scalar k (toy only)</label><input id="scalar" type="number" min="1" max="20" value="6"></div><button class="btn accent" id="calculate">Calculate Q = kG</button><button class="btn" id="reset">Reset</button></div>
+        <div class="metric-row"><div class="metric"><span class="label">Base point G</span><strong>(1, 5)</strong></div><div class="metric"><span class="label">Current step</span><strong id="stepMetric">1 / 6</strong></div><div class="metric"><span class="label">Public point Q</span><strong id="publicPoint">(1, 12)</strong></div></div>
+        <div class="controls"><button class="btn" id="prev">← Previous</button><button class="btn accent" id="next">Next step →</button><button class="btn" id="play">▶ Play slowly</button><label class="field"><span>Speed</span><input id="speed" type="range" min="1" max="5" value="3"></label></div>
+        <div style="height:14px"></div><div id="stepExplanation" class="step-box" aria-live="polite"></div>
+      </section>
+      <section class="panel"><h2>02 / The finite-field map</h2><p>Each dot is a valid point whose coordinates satisfy the curve equation modulo 17. This is a discrete set—not a continuous real-valued curve.</p>
+        <div class="svg-wrap"><div id="curvePlot"></div></div><div class="legend"><span>Public point / current result</span><span class="base">Base point G</span><span class="current">Current step</span></div>
+      </section>
+    </div>
+    <aside>
+      <section class="panel"><h2>What the algorithm does</h2><p>Scalar multiplication means repeated point addition. It does <strong>not</strong> mean multiplying x and y separately.</p>
+        <div class="step-box">Q = kG = G + G + ... + G
+             (k times)</div>
+        <p>For distinct points P and R, calculate the slope λ, then the resulting coordinates:</p>
+        <div class="step-box">λ = (y₂ − y₁) · (x₂ − x₁)⁻¹ mod 17
+x₃ = λ² − x₁ − x₂ mod 17
+y₃ = λ(x₁ − x₃) − y₁ mod 17</div>
+        <p>For point doubling, use λ = 3x₁² · (2y₁)⁻¹ mod 17. The inverse is a modular multiplicative inverse.</p>
+      </section>
+      <section class="panel"><h2>03 / Statistical exploration</h2><p>The experiment enumerates the nonzero multiples of G in its small subgroup. The charts describe this toy group only.</p><div class="metric-row"><div class="metric"><span class="label">Order of G</span><strong id="orderMetric">7</strong></div><div class="metric"><span class="label">Distinct multiples</span><strong id="distinctMetric">6</strong></div><div class="metric"><span class="label">Coordinate values</span><strong>0–16</strong></div></div>
+        <h3>Frequency of x coordinates</h3><div id="xFrequencies" class="bar-list"></div>
+        <h3 style="margin-top:20px">Frequency of y coordinates</h3><div id="yFrequencies" class="bar-list"></div>
+      </section>
+      <section class="panel"><h2>Interpretation, not overclaiming</h2><ul><li>Scalar multiplication is deterministic and easy to compute forward.</li><li>The ECDLP is difficult only when the curve and group parameters are cryptographically suitable.</li><li>On this tiny curve, brute force is trivial and outputs repeat periodically.</li><li>Uniform-looking frequencies or a Hamming-distance change here do not establish cryptographic security or a hash-like avalanche effect.</li></ul></section>
+    </aside>
+  </div>
+  <section class="panel"><h2>Point sequence</h2><p>Computed sequence for the selected k. The point at infinity is the identity element and is written as O.</p><div class="table-wrap"><table><thead><tr><th>Multiple</th><th>Operation</th><th>Point</th><th>Note</th></tr></thead><tbody id="sequenceRows"></tbody></table></div></section>
+  <section class="callout"><span class="callout-icon">!</span><div><h3>Security note</h3><p>This toy curve is only for learning. It is not secp256k1 and must never be used to protect real data. The default point has order 7, so the subgroup contains only a handful of distinct points.</p></div></section>
+</main>
+<footer><span>CryptoLab · Homework 1</span><span><a href="../homework-2/">Continue to Homework 2 →</a></span></footer>
+<script src="script.js"></script>
+</body></html>
