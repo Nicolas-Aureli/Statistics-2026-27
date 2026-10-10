@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Homework 2 — Ethereum Wallet Pipeline | CryptoLab</title><link rel="stylesheet" href="../assets/style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Homework 2 — Ethereum Wallet Pipeline | Statistics 2026-27</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body>
-<header class="site-header"><a class="brand" href="../"><span class="brand-mark">C</span> CryptoLab</a><nav><a href="../">Home</a><a href="../homework-1/">Homework 1</a><a href="./">Homework 2</a></nav></header>
+<header class="site-header"><a class="brand" href="../"><span class="brand-mark"></span> Statistics 2026-27</a><nav><a href="../">Home</a><a href="../homework-1/">Homework 1</a><a href="./">Homework 2</a></nav></header>
 <main>
-<section class="page-hero"><div class="breadcrumbs"><a href="../">CryptoLab</a> / Homework 2</div><p class="eyebrow">EXPERIMENT 02 · WALLET STANDARDS</p><h1>From recovery phrase<br><span class="gradient-text">to Ethereum address.</span></h1><p>A wallet uses several distinct standards because key management, public-key cryptography, hashing and error detection solve different problems. Select each stage to inspect its purpose.</p></section>
+<section class="page-hero"><div class="breadcrumbs"><a href="../">Statistics 2026-27</a> / Homework 2</div><p class="eyebrow">EXPERIMENT 02 · WALLET STANDARDS</p><h1>From recovery phrase<br><span class="gradient-text">to Ethereum address.</span></h1><p>A wallet uses several distinct standards because key management, public-key cryptography, hashing and error detection solve different problems. Select each stage to inspect its purpose.</p></section>
 <section class="panel"><h2>01 / Explore the pipeline</h2><p>Select a stage. This is a conceptual walkthrough of the standard process, not a wallet implementation and not a request for real secret material.</p><div class="layout-grid">
   <div class="pipeline" id="pipeline">
     <button class="pipeline-step active" data-id="bip39"><span class="step-num">01</span><span><strong>BIP-39</strong><small>Mnemonic → seed</small></span><span class="arrow">↗</span></button>
@@ -46,16 +46,7 @@
 <tr><td>Keccak-256</td><td>Fixed 256-bit output; designed for preimage and collision resistance.</td><td>Hashing does not itself provide secrecy or prove identity.</td></tr>
 <tr><td>EIP-55</td><td>Mixed-case pattern can detect many transcription errors.</td><td>It is an error-detection convention, not a cryptographic authentication mechanism.</td></tr>
 </tbody></table></div><p>Different components have different statistical and security goals. A visually uniform set of outputs alone is not proof of cryptographic security; security analysis also depends on the construction, threat model and known attack resistance.</p></section>
-<section class="panel"><h2>References</h2><div class="reference-list">
-<a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noreferrer">BIP-32 specification ↗</a>
-<a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki" target="_blank" rel="noreferrer">BIP-39 specification ↗</a>
-<a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki" target="_blank" rel="noreferrer">BIP-44 specification ↗</a>
-<a href="https://eips.ethereum.org/EIPS/eip-55" target="_blank" rel="noreferrer">EIP-55 specification ↗</a>
-<a href="https://csrc.nist.gov/pubs/fips/202/final" target="_blank" rel="noreferrer">NIST FIPS 202 ↗</a>
-<a href="https://www.secg.org/sec2-v2.pdf" target="_blank" rel="noreferrer">SEC 2 parameters ↗</a>
-</div></section>
-<section class="callout"><span class="callout-icon">!</span><div><h3>Privacy and security</h3><p>This page is a conceptual guide. It does not generate a wallet or calculate a real address. Never paste a real recovery phrase or private key into a website for a homework exercise.</p></div></section>
 </main>
-<footer><span>CryptoLab · Homework 2</span><span><a href="../homework-1/">← Return to Homework 1</a></span></footer>
+<footer><span>Statistics 2026-27 · Homework 2</span><span><a href="../homework-1/">← Return to Homework 1</a></span></footer>
 <script src="script.js"></script>
 </body></html>
