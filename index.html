@@ -3,51 +3,118 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="An interactive learning lab for elliptic-curve scalar multiplication and Ethereum wallet cryptography.">
+
+  <meta name="description"
+        content="Coursework, exercises and projects for Statistics 2026-27.">
+
   <title>Statistics 2026-27</title>
   <link rel="stylesheet" href="assets/style.css">
 </head>
+
 <body>
   <header class="site-header">
-    <a class="brand" href="./"><span class="brand-mark"></span> Statistics 2026-27</a>
-    <nav><a href="homework-1/">Homework 1</a><a href="homework-2/">Homework 2</a><a href="#references">References</a></nav>
+    <a class="brand" href="./">
+      <span class="brand-mark"></span>
+      Statistics 2026-27
+    </a>
+
+    <nav>
+      <a href="#homework">Homework</a>
+      <a href="#about">About</a>
+    </nav>
   </header>
+
   <main>
+    <!-- Introduction -->
     <section class="hero">
-      <p class="eyebrow">A small interactive cryptography lab</p>
-      <h1>From elliptic curves<br><span class="gradient-text">to Ethereum wallets.</span></h1>
-      <p class="hero-copy">Two guided experiments about the mathematics behind public keys and the standards that turn wallet recovery material into an Ethereum address.</p>
-      <div class="hero-actions"><a class="button primary" href="homework-1/">Explore scalar multiplication <span>↗</span></a><a class="button secondary" href="homework-2/">Trace a wallet pipeline</a></div>
-    </section>
-    <section class="section">
-      <div class="section-heading"><p class="eyebrow">THE LAB</p><h2>Two questions, two experiments.</h2></div>
-      <div class="cards">
-        <a class="feature-card" href="homework-1/">
-          <div class="card-top"><span class="number">01</span><span class="card-icon">↗</span></div>
-          <p class="eyebrow">ELLIPTIC-CURVE CRYPTOGRAPHY</p>
-          <h3>Can you go forward easily but not backward?</h3>
-          <p>Calculate multiples of a point on a tiny finite-field curve. Inspect each modular operation, then explore the limits of statistical conclusions on a toy group.</p>
-          <span class="card-link">Open the point explorer <span>→</span></span>
-        </a>
-        <a class="feature-card" href="homework-2/">
-          <div class="card-top"><span class="number">02</span><span class="card-icon">⌘</span></div>
-          <p class="eyebrow">WALLET STANDARDS</p>
-          <h3>How does a mnemonic become an address?</h3>
-          <p>Follow the roles of BIP-39, BIP-32, BIP-44, secp256k1, Keccak-256 and EIP-55—and learn why they are not interchangeable.</p>
-          <span class="card-link">Trace the pipeline <span>→</span></span>
+      <p class="eyebrow">COURSEWORK AND PROJECTS</p>
+
+      <h1>
+        Statistics for Cybersecurity
+        <br>
+        <span class="gradient-text">Learning through practice.</span>
+      </h1>
+
+      <p class="hero-copy">
+        This website collects homework and projects developed during
+        the Statistics 2026-27 course. Each section explores a different
+        topic through exercises, examples and visualizations.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="#homework">
+          Explore homework <span>→</span>
         </a>
       </div>
     </section>
-    <section class="section reference-section" id="references">
-      <div class="section-heading"><p class="eyebrow">PRIMARY SOURCES</p><h2>Read the specifications.</h2></div>
-      <div class="reference-list">
-        <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank" rel="noreferrer">BIP-32 — Hierarchical Deterministic Wallets <span>↗</span></a>
-        <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki" target="_blank" rel="noreferrer">BIP-44 — Multi-Account Hierarchy for Deterministic Wallets <span>↗</span></a>
-        <a href="https://eips.ethereum.org/EIPS/eip-55" target="_blank" rel="noreferrer">EIP-55 — Mixed-case checksum address encoding <span>↗</span></a>
-        <a href="https://csrc.nist.gov/pubs/fips/202/final" target="_blank" rel="noreferrer">NIST FIPS 202 — SHA-3 Standard <span>↗</span></a>
+
+    <!-- Homework list -->
+    <section class="section" id="homework">
+      <div class="section-heading">
+        <p class="eyebrow">COURSEWORK</p>
+        <h2>Homework</h2>
+        <p class="section-copy">
+          Exercises and projects completed throughout the course.
+        </p>
       </div>
+
+      <div class="homework-list">
+
+        <a class="homework-item" href="homework-1/">
+          <span class="homework-number">01</span>
+
+          <span class="homework-content">
+            <span class="homework-title">
+              Elliptic Curve Scalar Multiplication
+            </span>
+            <span class="homework-description">
+              Explore point addition and scalar multiplication
+              on a small elliptic curve over a finite field.
+            </span>
+          </span>
+
+          <span class="homework-arrow">↗</span>
+        </a>
+
+        <a class="homework-item" href="homework-2/">
+          <span class="homework-number">02</span>
+
+          <span class="homework-content">
+            <span class="homework-title">
+              From Private Keys to Ethereum Addresses
+            </span>
+            <span class="homework-description">
+              Discover the main cryptographic components and
+              standards involved in Ethereum wallet derivation.
+            </span>
+          </span>
+
+          <span class="homework-arrow">↗</span>
+        </a>
+
+        <!-- Add new homework items here as the course progresses. -->
+
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section about-section" id="about">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT</p>
+        <h2>About this website</h2>
+      </div>
+
+      <p class="about-copy">
+        This website is a collection of coursework and practical
+        exercises. Its purpose is to document the topics studied
+        during the course and explore them through examples and
+        small interactive projects.
+      </p>
     </section>
   </main>
-  <footer><span>Built with HTML, CSS and JavaScript</span></footer>
+
+  <footer>
+    <span>Statistics 2026-27</span>
+  </footer>
 </body>
 </html>
