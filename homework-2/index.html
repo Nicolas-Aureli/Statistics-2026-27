@@ -37,7 +37,7 @@
   <div class="timeline-item"><strong>2016</strong><b>EIP-55</b><p>Ethereum mixed-case checksum encoding was proposed to improve address typo detection.</p></div>
 </div></section>
 <section class="layout-grid">
-  <div class="panel"><h2>05 / Keccak-256 is not SHA3-256</h2><p>Keccak was selected as the basis for SHA-3, but Ethereum's Keccak-256 uses a different padding/domain-separation convention from standardized SHA3-256. They both produce 256-bit digests, but the outputs are not interchangeable.</p>
+  <div class="panel"><h2>05 / Keccak-256 is not SHA3-256</h2><p>Keccak was selected as the basis for SHA-3, but Ethereum's Keccak-256 uses a different padding/domain-separation convention from standardized SHA3-256. They both produce 256-bit digests, but the outputs are not interchangeable.</p><div></div>
   <div class="panel"><h2>06 / What EIP-55 does—and does not do</h2><p>EIP-55 hashes the lowercase hexadecimal address text with Keccak-256 and uses the hash nibbles to decide which alphabetic address characters become uppercase.</p><ul><li>It helps detect many typing errors.</li><li>It does not encrypt or hide the address.</li><li>It does not change the underlying 20-byte address.</li><li>It is not a digital signature and does not prove ownership.</li></ul><p>Specification example: <a class="text-link" href="https://eips.ethereum.org/EIPS/eip-55" target="_blank" rel="noreferrer">EIP-55 test cases ↗</a></p></div>
 </section>
 <section class="panel"><h2>07 / Statistical properties and design goals</h2><div class="table-wrap"><table><thead><tr><th>Primitive</th><th>Relevant property</th><th>Important limitation</th></tr></thead><tbody>
