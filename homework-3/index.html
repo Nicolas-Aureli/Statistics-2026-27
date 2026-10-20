@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Homework 2 — ECC, Caesar Cipher and Cryptanalysis</title>
+  <title>Homework 3 — ECC, Caesar Cipher and Cryptanalysis</title>
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
@@ -16,10 +16,9 @@
 
 <main class="page-shell">
   <section class="hero">
-    <p class="eyebrow">CRYPTOGRAPHY LAB · HOMEWORK 2</p>
+    <p class="eyebrow">CRYPTOGRAPHY LAB · HOMEWORK 3</p>
     <h1>Two ciphers, two different weaknesses</h1>
     <p class="lead">Explore a small-key elliptic-curve scheme and the Caesar cipher, then test two attacks that exploit very different kinds of information.</p>
-    <p class="notice"><strong>Scope:</strong> this is an educational toy implementation. It uses secp256k1 curve arithmetic, but deliberately restricts private keys to a small interval. It is not a production encryption system.</p>
   </section>
 
   <section class="panel">
@@ -87,8 +86,6 @@
     <p>The ECC attack is different: it does not infer a secret from letter frequencies. It checks candidate private scalars against the public-key equation. With a key restricted to 1,000 values, the search is easy. With a uniformly random 256-bit key, exhaustive search would require an astronomically large number of candidates. This conclusion assumes the curve and implementation are otherwise sound; real systems can still fail through bad randomness, side channels, key leakage, or protocol mistakes.</p>
     <p class="small-note">The encryption construction here is for learning only. Real-world ECC encryption usually uses a carefully specified hybrid scheme (for example, an ECIES-style construction) with a KDF, authenticated encryption, secure randomness, and robust message encoding.</p>
   </section>
-
-  <footer class="page-footer"><p>Interactive coursework · HTML, CSS and JavaScript · Educational use only</p></footer>
 </main>
 </body>
 </html>
