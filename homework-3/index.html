@@ -1,1 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Homework 2 — ECC, Caesar Cipher and Cryptanalysis</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../"><span class="brand-mark"></span> Statistics 2026-27</a>
+  <nav><a href="../">Home</a></nav>
+</header>
+
+<main class="page-shell">
+  <section class="hero">
+    <p class="eyebrow">CRYPTOGRAPHY LAB · HOMEWORK 2</p>
+    <h1>Two ciphers, two different weaknesses</h1>
+    <p class="lead">Explore a small-key elliptic-curve scheme and the Caesar cipher, then test two attacks that exploit very different kinds of information.</p>
+    <p class="notice"><strong>Scope:</strong> this is an educational toy implementation. It uses secp256k1 curve arithmetic, but deliberately restricts private keys to a small interval. It is not a production encryption system.</p>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading"><span class="section-number">01</span><div><h2>ECC message encryption</h2><p>Byte-by-byte elliptic-curve ElGamal, using a small message-point lookup table.</p></div></div>
+    <p>Let the private key be <code>d</code>, the public key be <code>Q = dG</code>, and the fresh ephemeral scalar be <code>r</code>. Each byte <code>m</code> is represented as <code>M = mG</code>. The ciphertext pair is <code>C1 = rG</code> and <code>C2 = M + rQ</code>. Decryption computes <code>C2 − dC1 = M</code>, then looks up the original byte.</p>
+    <p class="small-note">Because the demo encodes each byte as mG, decryption searches only the 256 possible byte values. This is intentionally inefficient and is not a general-purpose message encoding scheme.</p>
+    <div class="control-grid">
+      <label>Message <input id="ecc-message" value="Hello, cryptography!" maxlength="80"></label>
+      <label>Private key d (1–1000) <input id="ecc-private" type="number" min="1" max="1000" value="37"></label>
+      <label>Ephemeral scalar r (1–1000) <input id="ecc-ephemeral" type="number" min="1" max="1000" value="19"></label>
+    </div>
+    <div class="button-row"><button id="ecc-run" type="button">Encrypt and decrypt</button><button id="ecc-random" type="button" class="secondary">Choose new ephemeral r</button></div>
+    <div id="ecc-output" class="result-box" aria-live="polite"><p>Run the experiment to display the public key, ciphertext summary, and recovered message.</p></div>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading"><span class="section-number">02</span><div><h2>Caesar cipher</h2><p>A substitution cipher with only 26 possible shifts.</p></div></div>
+    <div class="control-grid">
+      <label>Message <textarea id="caesar-message" rows="3">Statistics helps us discover patterns, but patterns can also reveal secrets.</textarea></label>
+      <label>Shift key (0–25) <input id="caesar-key" type="number" min="0" max="25" value="7"></label>
+    </div>
+    <div class="button-row"><button id="caesar-run" type="button">Encrypt and decrypt</button></div>
+    <div id="caesar-output" class="result-box" aria-live="polite"><p>Letters are shifted; spaces, punctuation and letter case are preserved.</p></div>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading"><span class="section-number">03</span><div><h2>Statistical attack on Caesar</h2><p>Estimate the shift by comparing ciphertext letter counts with typical English letter frequencies.</p></div></div>
+    <p>The attack scores each of the 26 possible decryptions using a chi-square statistic. A lower score means that the candidate's letter distribution is closer to the reference distribution. This is a statistical guess, not a proof that the text is correct.</p>
+    <label>Ciphertext <textarea id="attack-ciphertext" rows="4">Aopz pz h zptwsl lhunspzo zh twsl. Aol tvyl lehtwsl aolee aol ilaal y aol jop zlu zayhalnpj h a a hjr jhu il.</textarea></label>
+    <div class="button-row"><button id="attack-run" type="button">Estimate Caesar key</button></div>
+    <div id="attack-output" class="result-box" aria-live="polite"><p>Paste a ciphertext or use the sample to inspect the ranked candidate shifts.</p></div>
+    <div class="experiment-grid">
+      <div><h3>Length experiment</h3><p>Generate ciphertexts from the same English sample at increasing lengths and compare whether the best-ranked key is correct.</p><button id="length-run" type="button" class="secondary">Run length experiment</button></div>
+      <div id="length-output" class="result-box"><p>The table will report the estimated key for several text lengths.</p></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading"><span class="section-number">04</span><div><h2>Restricted-key ECC attack</h2><p>Recover the private key by checking every candidate in the intentionally small key range.</p></div></div>
+    <p>The attack knows the public key <code>Q</code> and tests candidates <code>d = 1, 2, …, N</code> until <code>dG = Q</code>. It exploits the restricted key space; it does not break the underlying secp256k1 discrete-logarithm problem at its normal size.</p>
+    <div class="control-grid">
+      <label>Secret private key (1–1000) <input id="attack-private" type="number" min="1" max="1000" value="137"></label>
+      <label>Maximum candidates N (1–1000) <input id="attack-limit" type="number" min="1" max="1000" value="300"></label>
+    </div>
+    <div class="button-row"><button id="ecc-attack-run" type="button">Brute-force the restricted key</button></div>
+    <div id="ecc-attack-output" class="result-box" aria-live="polite"><p>The public key will be derived from the secret key; the attack will receive only the public point and the candidate range.</p></div>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading"><span class="section-number">05</span><div><h2>What the experiments show</h2><p>Same goal—recover information—but different attack strategies.</p></div></div>
+    <div class="comparison-table-wrap">
+      <table>
+        <thead><tr><th>Property</th><th>Caesar cipher</th><th>Restricted-key ECC toy</th></tr></thead>
+        <tbody>
+          <tr><td>Secret space</td><td>26 shifts</td><td>At most 1,000 candidate private keys in this demo</td></tr>
+          <tr><td>Attack input</td><td>Ciphertext and language statistics</td><td>Public point Q and known candidate interval</td></tr>
+          <tr><td>Core method</td><td>Rank candidate plaintexts statistically</td><td>Test whether dG equals Q</td></tr>
+          <tr><td>Why it works</td><td>Small key space and language redundancy</td><td>Private key was deliberately restricted</td></tr>
+          <tr><td>Important limitation</td><td>Short text may not contain enough statistical evidence</td><td>A properly generated 256-bit private key is not searchable this way</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Discussion</h3>
+    <p>Caesar encryption preserves the language's broad statistical structure because each plaintext letter is consistently replaced by another letter. The attack uses that redundancy to rank possible shifts; it can fail on short, unusual, or non-English text.</p>
+    <p>The ECC attack is different: it does not infer a secret from letter frequencies. It checks candidate private scalars against the public-key equation. With a key restricted to 1,000 values, the search is easy. With a uniformly random 256-bit key, exhaustive search would require an astronomically large number of candidates. This conclusion assumes the curve and implementation are otherwise sound; real systems can still fail through bad randomness, side channels, key leakage, or protocol mistakes.</p>
+    <p class="small-note">The encryption construction here is for learning only. Real-world ECC encryption usually uses a carefully specified hybrid scheme (for example, an ECIES-style construction) with a KDF, authenticated encryption, secure randomness, and robust message encoding.</p>
+  </section>
+
+  <footer class="page-footer"><p>Interactive coursework · HTML, CSS and JavaScript · Educational use only</p></footer>
+</main>
+</body>
+</html>
 
