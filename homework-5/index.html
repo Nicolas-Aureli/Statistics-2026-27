@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Homework 5: Welford's recurrence formulas and sampling mean and variance.">
+  <title>Homework 5 | Welford’s Recurrence Formulas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">S</span>
+    <span>STATISTICS <span class="brand-muted">2026–27</span></span>
+  </a>
+  <nav class="header-nav">
+    <a href="../index.html">All homeworks</a>
+    <a href="#simulation">Simulation</a>
+  </nav>
+</header>
+
+<main>
+  <section class="page-hero homework-hero">
+    <div class="breadcrumbs">
+      <a href="../index.html">Home</a><span>/</span><span>Homework 05</span>
+    </div>
+    <div class="eyebrow">STATISTICS FOR CYBERSECURITY · HOMEWORK 05</div>
+    <h1>Welford’s Recurrence<br><span class="gradient-text">Formulas</span></h1>
+    <p class="hero-description">
+      Computing mean and variance incrementally, then using repeated samples
+      to understand how statistical estimates behave as the sample size increases.
+    </p>
+    <div class="hero-tags">
+      <span>Online algorithms</span>
+      <span>Sampling</span>
+      <span>Inferential statistics</span>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-heading">
+      <span class="section-index">01</span>
+      <div>
+        <div class="eyebrow">BACKGROUND</div>
+        <h2>Introduction</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>
+        When analysing a large number of observations, it is often useful to
+        update statistical quantities as new data arrive. A straightforward
+        approach would be to store every observation and recompute the mean
+        and variance whenever a new value is added. However, this becomes
+        inefficient when datasets are large or when observations arrive
+        continuously.
+      </p>
+      <p>
+        Welford’s recurrence formulas solve this problem by updating the mean
+        and the sum of squared deviations using only the previous state and
+        the newly observed value. The method requires constant memory,
+        performs a small number of operations per observation, and is
+        numerically more stable than some direct formulas for variance.
+      </p>
+      <p>
+        In the second exercise, the method is applied to a simulation in
+        which several hackers independently attempt to penetrate systems.
+        Each attempt produces a score between 0 and 10. By comparing the
+        statistics computed from each hacker’s trajectory with the known
+        theoretical values, we can study how reliable sample estimates become
+        as the number of observations increases.
+      </p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-heading">
+      <span class="section-index">02</span>
+      <div>
+        <div class="eyebrow">EXERCISE 1</div>
+        <h2>Welford’s recurrence formulas</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        Consider a sequence of observations x₁, x₂, …, xₙ. After processing
+        the first n−1 values, suppose that we already know their mean
+        μₙ₋₁ and their sum of squared deviations SSₙ₋₁. We now want to
+        include a new observation xₙ, without going back through the
+        previous data.
+      </p>
+
+      <h3>Updating the mean</h3>
+      <p>
+        The mean of the first n observations is the previous mean corrected
+        by the difference between the new value and that previous mean.
+        This difference is often called the <em>delta</em>. Dividing it by
+        the new sample size ensures that the correction becomes smaller as
+        more observations are collected.
+      </p>
+
+      <div class="equation-card">
+        <span class="equation-label">MEAN RECURRENCE</span>
+        <div class="equation">μₙ = μₙ₋₁ + (xₙ − μₙ₋₁) / n</div>
+      </div>
+
+      <h3>Updating the sum of squares</h3>
+      <p>
+        Define SSₙ as the sum of squared distances of the observations from
+        their updated mean. When the new observation is included, all
+        deviations are now measured relative to μₙ rather than μₙ₋₁.
+        Welford’s key result expresses this change using only the old mean,
+        the new mean and the new observation:
+      </p>
+
+      <div class="equation-card">
+        <span class="equation-label">SUM OF SQUARED DEVIATIONS</span>
+        <div class="equation">
+          SSₙ = SSₙ₋₁ + (xₙ − μₙ₋₁)(xₙ − μₙ)
+        </div>
+      </div>
+
+      <p>
+        The first factor measures how far the new observation is from the
+        old mean; the second measures how far it is from the updated mean.
+        Their product is exactly the correction that must be added to the
+        previous sum of squares. We initialise the algorithm with
+        n = 0, μ₀ = 0 and SS₀ = 0.
+      </p>
+
+      <h3>Computing the variance</h3>
+      <p>
+        Once all observations have been processed, the sample variance is
+        obtained by dividing the accumulated sum of squares by n−1. This
+        denominator, known as Bessel’s correction, makes the sample variance
+        an unbiased estimator of the population variance when observations
+        are independent and identically distributed with finite variance.
+      </p>
+
+      <div class="equation-card">
+        <span class="equation-label">SAMPLE VARIANCE</span>
+        <div class="equation">s²ₙ = SSₙ / (n − 1), for n ≥ 2</div>
+      </div>
+
+      <p>
+        The core update consists of three operations: increment the count,
+        update the mean using the old delta, and update the sum of squares
+        using the new mean. No previous observation needs to be stored.
+      </p>
+    </div>
+
+    <div class="code-panel">
+      <div class="code-panel-head">
+        <span>WELFORD UPDATE</span>
+        <span class="live-dot">CORE ALGORITHM</span>
+      </div>
+      <pre><code>n += 1
+delta = x - mean
+mean += delta / n
+M2 += delta * (x - mean)
+
+# At the end of the stream:
+sample_variance = M2 / (n - 1)  # if n >= 2</code></pre>
+      <p class="code-caption">
+        Here, <code>M2</code> stores the running sum of squared deviations,
+        equivalent to SSₙ.
+      </p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-heading">
+      <span class="section-index">03</span>
+      <div>
+        <div class="eyebrow">EXERCISE 2</div>
+        <h2>Sampling mean and variance</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        We now extend the previous setting. There are m hackers, and each
+        hacker attempts to penetrate n systems. Every attempt receives a
+        score between 0 and 10. For this experiment, scores are independent
+        draws from a discrete uniform distribution: each integer from 0
+        through 10 is equally likely.
+      </p>
+      <p>
+        This is a convenient choice because its theoretical properties are
+        known in advance. It allows us to check whether the statistics
+        estimated from the simulated trajectories agree with the population
+        parameters.
+      </p>
+    </div>
+
+    <div class="distribution-card">
+      <div>
+        <span class="mini-label">CHOSEN DISTRIBUTION</span>
+        <h3>Discrete uniform</h3>
+        <p>Every score from 0 to 10 has probability 1/11.</p>
+      </div>
+      <div class="distribution-bars">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="distribution-axis">
+        <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span>
+        <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+      </div>
+    </div>
+
+    <div class="theory-grid">
+      <article class="theory-card">
+        <span class="mini-label">THEORETICAL MEAN</span>
+        <div class="theory-value">μ = 5</div>
+        <p>The average of the eleven possible scores.</p>
+      </article>
+      <article class="theory-card">
+        <span class="mini-label">THEORETICAL VARIANCE</span>
+        <div class="theory-value">σ² = 10</div>
+        <p>The expected squared distance from the population mean.</p>
+      </article>
+    </div>
+
+    <div class="prose">
+      <h3>From individual trajectories to overall estimates</h3>
+      <p>
+        Each hacker generates a trajectory containing n scores, one for
+        each attempted system. Welford’s algorithm is applied independently
+        to each trajectory, producing one sample mean and one sample
+        variance per hacker. We then average these m sample means and,
+        separately, these m sample variances.
+      </p>
+      <p>
+        The average of the sample means should be close to the theoretical
+        mean μ = 5. Likewise, because we use the sample variance with
+        denominator n−1, the average of the sample variances should be close
+        to the theoretical variance σ² = 10. With a finite number of
+        hackers, the averages will not generally be exactly equal to their
+        theoretical values; random variation is expected.
+      </p>
+
+      <div class="equation-card">
+        <span class="equation-label">AVERAGES ACROSS HACKERS</span>
+        <div class="equation">
+          μ̄ = (1/m) Σ μⱼ &nbsp;&nbsp;&nbsp; s̄² = (1/m) Σ sⱼ²
+        </div>
+      </div>
+
+      <h3>Why does increasing n matter?</h3>
+      <p>
+        The number of systems attempted by each hacker determines the
+        sample size of each trajectory. As n grows, each hacker’s sample
+        mean becomes less sensitive to the particular scores observed. In
+        fact, its variance is σ²/n = 10/n, so the standard deviation of the
+        sample means decreases proportionally to 1/√n.
+      </p>
+      <p>
+        The sample variance is also an unbiased estimate of σ², and its
+        variability decreases as the sample size increases. Consequently,
+        the sample variances tend to cluster more tightly around 10.
+        Increasing m does something different: it gives us more independent
+        estimates to average, making the overall averages more stable,
+        while leaving the variability of an individual hacker’s estimate
+        unchanged.
+      </p>
+    </div>
+  </section>
+
+  <section class="content-section simulation-section" id="simulation">
+    <div class="section-heading">
+      <span class="section-index">04</span>
+      <div>
+        <div class="eyebrow">INTERACTIVE EXPERIMENT</div>
+        <h2>Simulation and results</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        Adjust the number of hackers and the number of systems attempted
+        by each hacker, then run the experiment. The simulation generates
+        independent scores and uses Welford’s recurrence formulas to
+        compute every hacker’s sample mean and sample variance.
+      </p>
+    </div>
+
+    <div class="simulator">
+      <aside class="sim-controls">
+        <div class="control-heading">
+          <span>EXPERIMENT PARAMETERS</span>
+          <span class="live-dot">READY TO RUN</span>
+        </div>
+
+        <label for="hackersInput">
+          Number of hackers <strong id="hackersValue">1,000</strong>
+        </label>
+        <input id="hackersInput" type="range" min="100" max="5000" step="100" value="1000">
+        <div class="range-labels"><span>100</span><span>5,000</span></div>
+
+        <label for="systemsInput">
+          Systems per hacker <strong id="systemsValue">100</strong>
+        </label>
+        <input id="systemsInput" type="range" min="2" max="1000" step="1" value="100">
+        <div class="range-labels"><span>2</span><span>1,000</span></div>
+
+        <label for="seedInput">
+          Random seed <span class="optional-label">reproducibility</span>
+        </label>
+        <input id="seedInput" class="number-input" type="number" value="2026" min="0" max="2147483647">
+
+        <button class="btn btn-primary run-button" id="runButton" type="button">
+          Run simulation <span>↗</span>
+        </button>
+        <p class="control-note">
+          Use the same seed to reproduce the same experiment. Change it to
+          generate another random sample.
+        </p>
+      </aside>
+
+      <div class="sim-output">
+        <div class="result-heading">
+          <div>
+            <span class="mini-label">LATEST EXPERIMENT</span>
+            <h3>Estimated population parameters</h3>
+          </div>
+          <span class="result-status" id="runStatus">Not run yet</span>
+        </div>
+
+        <div class="metrics-grid">
+          <article class="metric-card">
+            <span>Average of sample means</span>
+            <strong id="meanEstimate">—</strong>
+            <small>Theoretical μ = 5</small>
+            <em id="meanError">Run the simulation</em>
+          </article>
+          <article class="metric-card">
+            <span>Average of sample variances</span>
+            <strong id="varianceEstimate">—</strong>
+            <small>Theoretical σ² = 10</small>
+            <em id="varianceError">Run the simulation</em>
+          </article>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">
+            <div>
+              <h4>Sampling means</h4>
+              <p>Distribution across all hackers</p>
+            </div>
+            <span class="chart-legend"><i class="legend-dot mint"></i>Observed</span>
+          </div>
+          <canvas id="meansChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">
+            <div>
+              <h4>Sampling variances</h4>
+              <p>Distribution across all hackers</p>
+            </div>
+            <span class="chart-legend"><i class="legend-dot blue"></i>Observed</span>
+          </div>
+          <canvas id="variancesChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">
+            <div>
+              <h4>Estimates as n increases</h4>
+              <p>Average estimates for different trajectory lengths</p>
+            </div>
+            <span class="chart-legend">
+              <i class="legend-dot mint"></i>Mean
+              <i class="legend-dot blue"></i>Variance
+            </span>
+          </div>
+          <canvas id="convergenceChart" class="tall-chart"></canvas>
+        </div>
+
+        <div class="table-wrap">
+          <div class="chart-title">
+            <div>
+              <h4>Comparison with theoretical values</h4>
+              <p>Current experiment</p>
+            </div>
+          </div>
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Statistic</th>
+                <th>Experimental</th>
+                <th>Theoretical</th>
+                <th>Absolute error</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mean</td>
+                <td id="tableMean">—</td>
+                <td>5.000</td>
+                <td id="tableMeanError">—</td>
+              </tr>
+              <tr>
+                <td>Variance</td>
+                <td id="tableVariance">—</td>
+                <td>10.000</td>
+                <td id="tableVarianceError">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="simulation-explanation" id="simulationExplanation">
+          Run the simulation to generate estimates and compare them with
+          the theoretical parameters.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section conclusions-section">
+    <div class="section-heading">
+      <span class="section-index">05</span>
+      <div>
+        <div class="eyebrow">INTERPRETATION</div>
+        <h2>Discussion and conclusions</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        The experiment illustrates two important properties of sample
+        statistics. First, the sample mean and the sample variance are
+        unbiased estimators of their corresponding population parameters.
+        Across many independent hackers, their average estimates should
+        therefore approach 5 and 10, respectively. Small differences are
+        normal and are caused by the randomness of the simulated samples.
+      </p>
+      <p>
+        Second, increasing the number of systems attempted by each hacker
+        makes the estimates more precise. The distributions of sample means
+        and sample variances become narrower, meaning that individual
+        estimates are less likely to be far from the theoretical values.
+        Increasing the number of hackers improves the precision of the
+        averages across hackers, whereas increasing the number of systems
+        improves the precision of each hacker’s estimate.
+      </p>
+      <p>
+        These properties are central to inferential statistics. In real
+        applications, the distribution of an entire population is usually
+        unknown, so we use a finite sample to estimate quantities such as
+        its mean and variance. Welford’s algorithm provides an efficient
+        way to compute these quantities as data arrive, while the
+        simulation demonstrates why larger samples generally lead to more
+        reliable estimates.
+      </p>
+    </div>
+
+    <div class="takeaway-panel">
+      <span class="mini-label">KEY TAKEAWAY</span>
+      <p>
+        More observations per hacker reduce the variability of each
+        hacker’s estimates. More hackers make the averages across hackers
+        more stable. Together, these effects show how sample size and
+        repeated sampling support statistical inference.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>STATISTICS FOR CYBERSECURITY · 2026–27</span>
+  <a href="../index.html">Back to all homeworks ↑</a>
+</footer>
+</body>
+</html>
