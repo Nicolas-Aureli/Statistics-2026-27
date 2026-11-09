@@ -1,1 +1,553 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Numerical integration through Riemann and Lebesgue approaches, and numerical computation of the standard normal CDF.">
+  <title>Homework 6 | Numerical Integration</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">
+      <span class="brand-mark"></span>
+      Statistics 2026-27
+    </a>
+    <nav>
+      <a href="../#homework">All homework</a>
+      <a href="#riemann-lebesgue">Integration</a>
+      <a href="#normal-cdf">Normal CDF</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero hw-hero">
+      <p class="eyebrow">HOMEWORK 06 · NUMERICAL METHODS</p>
+      <h1>
+        Numerical Integration
+        <br>
+        <span class="gradient-text">From areas to probabilities.</span>
+      </h1>
+      <p class="hero-copy">
+        This assignment explores two different ways of understanding
+        integration. First, we compare Riemann and Lebesgue-inspired
+        numerical approximations. Then, we build numerical methods
+        for the cumulative distribution function of the standard normal
+        distribution.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="#riemann-lebesgue">
+          Start exploring <span>→</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section intro-grid">
+      <article class="intro-card">
+        <span class="card-index">01</span>
+        <h3>Riemann and Lebesgue</h3>
+        <p>
+          Instead of looking only at narrower and narrower intervals
+          on the x-axis, we will also partition the range of function
+          values and estimate the size of their preimages.
+        </p>
+      </article>
+      <article class="intro-card">
+        <span class="card-index">02</span>
+        <h3>The normal CDF</h3>
+        <p>
+          We will approximate the area under the Gaussian density
+          using Simpson's rule, an error-function series and a fast
+          closed-form approximation.
+        </p>
+      </article>
+    </section>
+
+    <!-- EXERCISE 1 -->
+    <section class="section" id="riemann-lebesgue">
+      <div class="section-heading">
+        <p class="eyebrow">EXERCISE 01</p>
+        <h2>Riemann vs Lebesgue Integration</h2>
+        <p class="section-copy">
+          Two perspectives on the same integral: partitioning the
+          domain or partitioning the range.
+        </p>
+      </div>
+
+      <div class="theory-panel">
+        <h3>Two ways to approximate an area</h3>
+        <p>
+          The Riemann approach divides the domain into small
+          subintervals. In each interval, the function is represented
+          by a selected value, and the corresponding rectangle
+          contributes to the total area. As the partition becomes
+          finer, the approximation generally improves for
+          Riemann-integrable functions.
+        </p>
+        <div class="formula">
+          <span>Riemann sum</span>
+          <strong>∑ f(xᵢ*) Δx</strong>
+        </div>
+        <p>
+          The Lebesgue point of view reverses the order of the
+          construction. Rather than asking what value the function
+          takes at each small piece of the domain, we group together
+          points where the function has similar values. We then
+          multiply each representative value by the measure of the
+          set of points mapped into that range interval.
+        </p>
+        <div class="formula">
+          <span>Lebesgue-inspired sum</span>
+          <strong>∑ yⱼ* · measure({x : f(x) ∈ Iⱼ})</strong>
+        </div>
+        <p class="note">
+          In the experiment below, the measure of each preimage is
+          estimated by counting sampled domain points. This is a
+          numerical approximation of the Lebesgue idea, not an exact
+          measure-theoretic computation.
+        </p>
+      </div>
+
+      <div class="experiment-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">INTERACTIVE EXPERIMENT</p>
+            <h3>Choose a function</h3>
+          </div>
+          <span class="live-tag">Live calculation</span>
+        </div>
+
+        <div class="controls-grid">
+          <label class="control-field">
+            <span>Function</span>
+            <select id="functionSelect">
+              <option value="sin">sin(x) · [0, π]</option>
+              <option value="square">x² · [0, 1]</option>
+              <option value="step">Step function · [0, 1]</option>
+              <option value="absolute">|x − 0.5| · [0, 1]</option>
+              <option value="inverseRoot">1 / √x · (0, 1]</option>
+              <option value="indicator">Indicator function · [0, 1]</option>
+              <option value="sinc">sin(x) / x · [0, π]</option>
+              <option value="dirichlet">Dirichlet function · [0, 1]</option>
+              <option value="thomae">Thomae's function · [0, 1]</option>
+            </select>
+          </label>
+
+          <label class="control-field">
+            <span>Domain partition (N): <strong id="nValue">1000</strong></span>
+            <select id="nSelect">
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000" selected>1,000</option>
+              <option value="5000">5,000</option>
+              <option value="10000">10,000</option>
+              <option value="30000">30,000</option>
+            </select>
+          </label>
+
+          <label class="control-field">
+            <span>Range partition (bins): <strong id="binsValue">50</strong></span>
+            <select id="binsSelect">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50" selected>50</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="function-description" id="functionDescription">
+          The sine function is continuous on the selected interval and
+          has an exact integral of 2.
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">
+            <div>
+              <h4>Function profile</h4>
+              <p>Sampled values over the selected domain</p>
+            </div>
+            <span class="chart-unit">f(x)</span>
+          </div>
+          <canvas id="functionChart" height="230"></canvas>
+        </div>
+
+        <div class="results-grid">
+          <article class="result-card">
+            <span class="result-label">Riemann midpoint</span>
+            <strong id="riemannResult">—</strong>
+            <small id="riemannError">Absolute error: —</small>
+          </article>
+          <article class="result-card">
+            <span class="result-label">Lebesgue-inspired</span>
+            <strong id="lebesgueResult">—</strong>
+            <small id="lebesgueError">Absolute error: —</small>
+          </article>
+          <article class="result-card reference-card">
+            <span class="result-label">Reference integral</span>
+            <strong id="exactResult">—</strong>
+            <small id="referenceType">Analytical value</small>
+          </article>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">
+            <div>
+              <h4>Approximation comparison</h4>
+              <p>How the two estimates compare with the reference value</p>
+            </div>
+          </div>
+          <canvas id="comparisonChart" height="220"></canvas>
+          <div class="legend">
+            <span><i class="legend-dot riemann-dot"></i> Riemann</span>
+            <span><i class="legend-dot lebesgue-dot"></i> Lebesgue-inspired</span>
+            <span><i class="legend-dot exact-dot"></i> Reference</span>
+          </div>
+        </div>
+
+        <div class="analysis-note" id="integrationAnalysis">
+          <h4>What should we observe?</h4>
+          <p>
+            For continuous functions, both approaches should approach
+            the same integral as the numerical resolution increases.
+            Their finite-resolution errors may differ because the
+            domain and range are discretized in different ways.
+          </p>
+        </div>
+
+        <button class="button secondary" id="runIntegration">
+          Recalculate <span>↻</span>
+        </button>
+      </div>
+
+      <div class="theory-panel pathology-panel">
+        <p class="eyebrow">A MATHEMATICAL EDGE CASE</p>
+        <h3>When a numerical grid can be misleading</h3>
+        <p>
+          The Dirichlet function is equal to 1 at rational numbers
+          and 0 at irrational numbers. Since rational and irrational
+          numbers are both dense in every interval, the function is
+          discontinuous everywhere. It is therefore not Riemann
+          integrable. However, the rationals have Lebesgue measure
+          zero, so its Lebesgue integral on [0, 1] is 0.
+        </p>
+        <p>
+          A uniform numerical grid usually contains only rational
+          sample points. A naive implementation would therefore
+          return 1 for the Riemann-style sample average. The
+          Lebesgue-inspired calculation in this demonstration uses
+          the known measure of the level sets and returns 0. This
+          special handling illustrates why mathematical knowledge
+          about a function can be essential when numerical sampling
+          is insufficient.
+        </p>
+        <p>
+          Thomae's function behaves differently. It is 1/q at a
+          rational number p/q in lowest terms and 0 at irrational
+          numbers. It is discontinuous at rational points but
+          continuous at irrational points. It is Riemann-integrable
+          and its integral is 0. A finite grid can still produce a
+          small positive estimate, which decreases as the sampling
+          resolution improves.
+        </p>
+      </div>
+
+      <div class="theory-panel">
+        <h3>Comparison and interpretation</h3>
+        <p>
+          For bounded Riemann-integrable functions, the Riemann and
+          Lebesgue integrals agree. The difference is not the final
+          value, but the way the integral is constructed. The
+          Lebesgue framework is more general: it can integrate
+          functions, such as the Dirichlet function, that are not
+          Riemann-integrable.
+        </p>
+        <p>
+          Computational efficiency depends on the implementation.
+          A Riemann sum requires evaluating the function at domain
+          sample points. The range-based method also needs sampled
+          function values, followed by assigning them to range bins
+          and counting the corresponding preimages. With a simple
+          histogram implementation, this additional grouping step
+          has a cost, but it can be useful when the distribution of
+          function values is itself important.
+        </p>
+      </div>
+    </section>
+
+    <!-- EXERCISE 2 -->
+    <section class="section" id="normal-cdf">
+      <div class="section-heading">
+        <p class="eyebrow">EXERCISE 02</p>
+        <h2>Numerical Computation of the Normal CDF</h2>
+        <p class="section-copy">
+          Computing probabilities from the Gaussian curve without
+          relying on an elementary antiderivative.
+        </p>
+      </div>
+
+      <div class="theory-panel">
+        <h3>Why is the normal CDF special?</h3>
+        <p>
+          The standard normal density is
+          φ(x) = (1 / √(2π)) e<sup>−x²/2</sup>.
+          Its cumulative distribution function is the area under
+          this density from minus infinity to x. Unlike many
+          elementary integrals, the antiderivative of the Gaussian
+          exponential cannot be expressed using a finite combination
+          of elementary functions.
+        </p>
+        <p>
+          This is a consequence of the differential-algebraic
+          criterion described by Liouville's theorem on elementary
+          antiderivatives. In this case, the integral of e<sup>−x²</sup>
+          does not have an elementary primitive. This does not mean
+          that the integral is undefined or cannot be represented
+          exactly: it means that a new special function is needed.
+        </p>
+        <div class="formula">
+          <span>Standard normal CDF</span>
+          <strong>Φ(x) = ∫<sub>−∞</sub><sup>x</sup> φ(t) dt</strong>
+        </div>
+        <p>
+          The error function provides exactly this representation:
+        </p>
+        <div class="formula">
+          <span>Connection with erf</span>
+          <strong>Φ(x) = ½ [1 + erf(x / √2)]</strong>
+        </div>
+        <p>
+          Special functions give a compact analytical definition,
+          but practical software still needs numerical algorithms
+          to evaluate them. Different algorithms are useful in
+          different regions of the input range, especially in the
+          tails where subtracting a number close to 1 can lose
+          numerical precision.
+        </p>
+      </div>
+
+      <div class="experiment-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">NUMERICAL LAB</p>
+            <h3>Compare three numerical methods</h3>
+          </div>
+          <span class="live-tag">Interactive calculation</span>
+        </div>
+
+        <div class="cdf-controls">
+          <label class="control-field">
+            <span>Evaluate Φ(x) at</span>
+            <input id="cdfInput" type="number" value="1.5" min="-3" max="3" step="0.1">
+          </label>
+          <label class="control-field">
+            <span>Simpson intervals</span>
+            <select id="simpsonSteps">
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000" selected>1,000</option>
+              <option value="5000">5,000</option>
+              <option value="10000">10,000</option>
+            </select>
+          </label>
+          <button class="button primary" id="calculateCdf">Calculate <span>→</span></button>
+        </div>
+        <p class="note">
+          The interactive input is restricted to −3 through 3 so
+          that the power-series method remains numerically stable.
+          The methods use symmetry to handle negative inputs.
+        </p>
+
+        <div class="results-table-wrap">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Computed value</th>
+                <th>Absolute error</th>
+                <th>Time (approx.)</th>
+              </tr>
+            </thead>
+            <tbody id="cdfResults">
+              <tr><td>Simpson's rule</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr><td>erf power series</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr><td>erf approximation</td><td>—</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">
+            <div>
+              <h4>Standard normal distribution</h4>
+              <p>The shaded area represents Φ(x)</p>
+            </div>
+            <span class="chart-unit">Probability density</span>
+          </div>
+          <canvas id="normalChart" height="250"></canvas>
+        </div>
+
+        <div class="analysis-note" id="cdfAnalysis">
+          <h4>Interpreting the methods</h4>
+          <p>
+            Simpson's rule approximates the integral directly.
+            The power series evaluates the error function through
+            its Taylor expansion. The third method uses a compact
+            polynomial approximation to the complementary error
+            function. Their speed and accuracy depend on the input
+            and the chosen numerical parameters.
+          </p>
+        </div>
+      </div>
+
+      <div class="theory-panel">
+        <h3>How the three methods work</h3>
+
+        <div class="method-explanation">
+          <span class="method-number">A</span>
+          <div>
+            <h4>Numerical integration — Simpson's rule</h4>
+            <p>
+              Using symmetry, Φ(x) can be written as ½ plus the
+              signed integral of the density from 0 to |x|.
+              Simpson's rule approximates this integral by fitting
+              quadratic polynomials over pairs of subintervals.
+              It is accurate for smooth functions and its error
+              decreases rapidly as the step size is reduced.
+            </p>
+          </div>
+        </div>
+
+        <div class="method-explanation">
+          <span class="method-number">B</span>
+          <div>
+            <h4>Power series expansion of erf</h4>
+            <p>
+              The error function has the expansion
+              erf(z) = (2/√π) Σ [(-1)<sup>n</sup> z<sup>2n+1</sup> /
+              (n!(2n+1))]. The terms can be accumulated recursively,
+              avoiding repeated factorial calculations. This is
+              convenient for moderate values of z, although many
+              terms may be needed as |z| grows.
+            </p>
+          </div>
+        </div>
+
+        <div class="method-explanation">
+          <span class="method-number">C</span>
+          <div>
+            <h4>Approximation based on erfc</h4>
+            <p>
+              The complementary error function can be approximated
+              with a rational-polynomial expression. It requires
+              only a small number of arithmetic operations and is
+              therefore fast. The approximation used here is
+              intended for demonstration; production libraries
+              generally use more carefully tuned algorithms to
+              maintain accuracy across the full floating-point range.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="theory-panel reference-panel">
+        <p class="eyebrow">REFERENCE AND VALIDATION</p>
+        <h3>Comparison with published values</h3>
+        <p>
+          The following values are taken from the standard normal
+          cumulative distribution table published in the NIST
+          Engineering Statistics Handbook. The table reports
+          areas under the standard normal curve and uses symmetry
+          to obtain probabilities for negative values.
+        </p>
+
+        <div class="reference-table-wrap">
+          <table class="results-table">
+            <thead>
+              <tr><th>x</th><th>Reference Φ(x)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>−2.00</td><td>0.02275</td></tr>
+              <tr><td>−1.00</td><td>0.15866</td></tr>
+              <tr><td>−0.50</td><td>0.30854</td></tr>
+              <tr><td>0.00</td><td>0.50000</td></tr>
+              <tr><td>0.50</td><td>0.69146</td></tr>
+              <tr><td>1.00</td><td>0.84134</td></tr>
+              <tr><td>1.50</td><td>0.93319</td></tr>
+              <tr><td>2.00</td><td>0.97725</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="source-link">
+          Source:
+          <a href="https://www.itl.nist.gov/div898/handbook/eda/section3/eda3671.htm" target="_blank" rel="noopener">
+            NIST — Cumulative Distribution Function of the Standard Normal Distribution
+          </a>
+        </p>
+        <p class="source-link">
+          Mathematical definition:
+          <a href="https://dlmf.nist.gov/7.2" target="_blank" rel="noopener">
+            NIST Digital Library of Mathematical Functions — Error Functions
+          </a>
+        </p>
+        <p class="source-link">
+          Additional reference:
+          <a href="https://faculty.etsu.edu/gardnerr/4047/notes-Hogg-McKean-Craig/Hogg-McKean-Craig-3-4.pdf" target="_blank" rel="noopener">
+            Hogg, McKean and Craig — Introduction to Mathematical Statistics
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <section class="section conclusion-section">
+      <div class="section-heading">
+        <p class="eyebrow">FINAL OBSERVATIONS</p>
+        <h2>What do these experiments tell us?</h2>
+      </div>
+      <div class="conclusion-grid">
+        <article class="conclusion-card">
+          <h3>Integration depends on perspective</h3>
+          <p>
+            Riemann and Lebesgue integration agree for functions
+            that are Riemann-integrable, but the Lebesgue framework
+            covers a wider class of measurable functions. The
+            Dirichlet function is a clear example of this difference.
+          </p>
+        </article>
+        <article class="conclusion-card">
+          <h3>Resolution is not everything</h3>
+          <p>
+            Increasing the number of samples usually improves a
+            numerical approximation, but it does not automatically
+            solve every problem. Pathological functions show that
+            the choice of sampling strategy and mathematical
+            assumptions also matter.
+          </p>
+        </article>
+        <article class="conclusion-card">
+          <h3>Special functions make computation practical</h3>
+          <p>
+            The normal CDF has an exact representation through erf,
+            even though it has no elementary antiderivative.
+            Numerical algorithms make this representation usable
+            in statistical applications.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Statistics 2026-27</span>
+    <span>Homework 06 · Numerical Integration</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
