@@ -1,0 +1,446 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description"
+        content="Statistical independence, contingency tables, conditional frequencies and the Chi-square test.">
+
+  <title>Homework 7 | Statistical Independence</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">
+      <span class="brand-mark"></span>
+      Statistics 2026-27
+    </a>
+
+    <nav>
+      <a href="../#homework">All homework</a>
+      <a href="#concepts">Theory</a>
+      <a href="#analysis">Data analysis</a>
+      <a href="#interpretation">Interpretation</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero hw-hero">
+      <p class="eyebrow">HOMEWORK 07 · STATISTICAL INDEPENDENCE</p>
+
+      <h1>
+        Are Two Variables
+        <br>
+        <span class="gradient-text">Statistically Independent?</span>
+      </h1>
+
+      <p class="hero-copy">
+        Explore the relationship between two categorical variables.
+        Build a contingency table from raw observations, compare
+        observed and expected frequencies, and use the Chi-square
+        statistic to investigate statistical independence.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button primary" href="#analysis">
+          Analyze a dataset <span>→</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section overview-grid">
+      <article class="overview-card">
+        <span class="overview-number">01</span>
+        <h3>Organize the observations</h3>
+        <p>
+          Start from pairs of categorical values and summarize
+          their occurrences in a contingency table.
+        </p>
+      </article>
+
+      <article class="overview-card">
+        <span class="overview-number">02</span>
+        <h3>Measure the relationship</h3>
+        <p>
+          Calculate marginal and conditional frequencies, then
+          determine the frequencies expected under independence.
+        </p>
+      </article>
+
+      <article class="overview-card">
+        <span class="overview-number">03</span>
+        <h3>Evaluate the evidence</h3>
+        <p>
+          Compare observed and expected counts using the
+          Chi-square statistic and interpret the result.
+        </p>
+      </article>
+    </section>
+
+    <section class="section" id="concepts">
+      <div class="section-heading">
+        <p class="eyebrow">THEORETICAL BACKGROUND</p>
+        <h2>Understanding independence</h2>
+        <p class="section-copy">
+          Independence describes whether knowing the value of one
+          variable provides information about the other.
+        </p>
+      </div>
+
+      <div class="concept-panel">
+        <h3>What does independence mean?</h3>
+
+        <p>
+          In probability theory, two events A and B are independent
+          when the occurrence of one does not change the probability
+          of the other. Mathematically, this means that the joint
+          probability equals the product of the marginal probabilities.
+        </p>
+
+        <div class="equation">
+          <span>Probability definition</span>
+          <strong>P(A ∩ B) = P(A) · P(B)</strong>
+        </div>
+
+        <p>
+          For two categorical random variables X and F, independence
+          means that every combination of their possible values
+          satisfies the following relationship:
+        </p>
+
+        <div class="equation">
+          <span>Independence of two variables</span>
+          <strong>P(X = xᵢ, F = fⱼ) = P(X = xᵢ) · P(F = fⱼ)</strong>
+        </div>
+
+        <p>
+          An equivalent interpretation is that the conditional
+          distribution of F given X should be the same as the
+          marginal distribution of F. In other words, knowing X
+          should not change the probabilities associated with F.
+        </p>
+      </div>
+
+      <div class="concept-panel">
+        <h3>From observations to a contingency table</h3>
+
+        <p>
+          A bivariate dataset consists of observations in pairs.
+          Each observation contains one value of X and one value
+          of F. Instead of analyzing every pair individually,
+          we count how often each combination occurs.
+        </p>
+
+        <p>
+          These counts form a contingency table. Its rows represent
+          the categories of X, while its columns represent the
+          categories of F. The row and column totals are called
+          marginal frequencies because they summarize one variable
+          without distinguishing the categories of the other.
+        </p>
+
+        <div class="equation">
+          <span>Expected frequency under independence</span>
+          <strong>Eᵢⱼ = (Row totalᵢ × Column totalⱼ) / N</strong>
+        </div>
+
+        <p>
+          If the variables are independent, the observed counts
+          should be reasonably close to these expected counts.
+          Differences are inevitable in real samples, even when
+          the variables are independent, because of random variation.
+        </p>
+      </div>
+
+      <div class="concept-panel">
+        <h3>The Chi-square statistic</h3>
+
+        <p>
+          The Pearson Chi-square statistic summarizes the
+          differences between observed and expected frequencies.
+          Each squared difference is divided by its expected
+          frequency, so that deviations are evaluated relative
+          to the size of the expected count.
+        </p>
+
+        <div class="equation">
+          <span>Pearson Chi-square statistic</span>
+          <strong>χ² = Σᵢ Σⱼ (Oᵢⱼ − Eᵢⱼ)² / Eᵢⱼ</strong>
+        </div>
+
+        <p>
+          The null hypothesis states that X and F are independent.
+          The alternative hypothesis states that they are associated.
+          A large Chi-square statistic indicates that the observed
+          table differs substantially from what independence would
+          predict.
+        </p>
+
+        <p>
+          For a table with r rows and c columns, the degrees of
+          freedom are:
+        </p>
+
+        <div class="equation">
+          <span>Degrees of freedom</span>
+          <strong>df = (r − 1)(c − 1)</strong>
+        </div>
+
+        <p class="concept-note">
+          The usual Chi-square approximation assumes independent
+          observations and sufficiently large expected frequencies.
+          If several expected counts are very small, the approximation
+          may be unreliable and the analysis should be treated with
+          caution.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="analysis">
+      <div class="section-heading">
+        <p class="eyebrow">INTERACTIVE DATA LAB</p>
+        <h2>Build and analyze a dataset</h2>
+        <p class="section-copy">
+          Use the example or replace it with your own bivariate
+          observations. Each line represents one observation.
+        </p>
+      </div>
+
+      <div class="analysis-panel">
+        <div class="dataset-toolbar">
+          <div>
+            <p class="eyebrow">DATA INPUT</p>
+            <h3>Your observations</h3>
+          </div>
+
+          <div class="preset-actions">
+            <button class="preset-button active" id="studyPreset">
+              Study example
+            </button>
+            <button class="preset-button" id="devicePreset">
+              Device example
+            </button>
+          </div>
+        </div>
+
+        <div class="dataset-explanation">
+          <p>
+            Enter two categorical values separated by a comma.
+            The first line must contain the column names.
+            For example:
+          </p>
+          <code>StudyMethod,ExamResult</code>
+          <code>Individual,Pass</code>
+          <code>Group,Fail</code>
+        </div>
+
+        <label class="data-label" for="datasetInput">
+          Bivariate dataset (CSV format)
+        </label>
+
+        <textarea id="datasetInput" spellcheck="false" rows="12"></textarea>
+
+        <div class="input-footer">
+          <span id="inputStatus">Example dataset loaded</span>
+          <button class="button primary" id="analyzeButton">
+            Analyze dataset <span>→</span>
+          </button>
+        </div>
+
+        <div class="error-message" id="errorMessage" hidden></div>
+      </div>
+
+      <div class="analysis-results" id="results" hidden>
+        <div class="result-heading">
+          <div>
+            <p class="eyebrow">ANALYSIS OUTPUT</p>
+            <h3 id="datasetTitle">Dataset analysis</h3>
+          </div>
+          <span class="sample-count" id="sampleCount">N = 0</span>
+        </div>
+
+        <div class="summary-strip">
+          <div>
+            <span>Variable X</span>
+            <strong id="variableX">—</strong>
+          </div>
+          <div>
+            <span>Variable F</span>
+            <strong id="variableF">—</strong>
+          </div>
+          <div>
+            <span>Observations</span>
+            <strong id="totalObservations">—</strong>
+          </div>
+        </div>
+
+        <div class="table-section">
+          <div class="table-heading">
+            <div>
+              <span class="step-label">STEP 01</span>
+              <h4>Observed contingency table</h4>
+              <p>Absolute frequencies and marginal totals</p>
+            </div>
+          </div>
+          <div class="table-scroll" id="observedTable"></div>
+        </div>
+
+        <div class="frequency-grid">
+          <div class="table-section">
+            <div class="table-heading">
+              <div>
+                <span class="step-label">STEP 02A</span>
+                <h4>Marginal frequencies</h4>
+                <p>Distribution of each variable separately</p>
+              </div>
+            </div>
+            <div id="marginalTables"></div>
+          </div>
+
+          <div class="table-section">
+            <div class="table-heading">
+              <div>
+                <span class="step-label">STEP 02B</span>
+                <h4>Conditional frequencies</h4>
+                <p>Row percentages: distribution of F given X</p>
+              </div>
+            </div>
+            <div class="table-scroll" id="conditionalTable"></div>
+            <p class="table-footnote">
+              Each row adds up to 100%. The percentages describe
+              the distribution of F within each category of X.
+            </p>
+          </div>
+        </div>
+
+        <div class="table-section">
+          <div class="table-heading">
+            <div>
+              <span class="step-label">STEP 03</span>
+              <h4>Expected frequencies under independence</h4>
+              <p>Calculated from marginal totals and the overall sample size</p>
+            </div>
+          </div>
+          <div class="table-scroll" id="expectedTable"></div>
+          <p class="table-footnote">
+            Expected counts are theoretical values and may be
+            fractional. They are not observed individuals.
+          </p>
+        </div>
+
+        <div class="table-section">
+          <div class="table-heading">
+            <div>
+              <span class="step-label">STEP 04</span>
+              <h4>Chi-square contributions</h4>
+              <p>Each cell contributes (Observed − Expected)² / Expected</p>
+            </div>
+          </div>
+          <div class="table-scroll" id="contributionTable"></div>
+        </div>
+
+        <div class="statistic-panel">
+          <div class="statistic-main">
+            <span class="statistic-label">Pearson Chi-square statistic</span>
+            <strong id="chiSquareValue">—</strong>
+            <span id="degreesFreedom">Degrees of freedom: —</span>
+          </div>
+
+          <div class="statistic-side">
+            <div>
+              <span>Significance level</span>
+              <strong>α = 0.05</strong>
+            </div>
+            <div>
+              <span>Critical value</span>
+              <strong id="criticalValue">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="decision-panel" id="decisionPanel">
+          <span class="decision-kicker">STATISTICAL DECISION</span>
+          <h4 id="decisionTitle">—</h4>
+          <p id="decisionText">—</p>
+        </div>
+
+        <div class="warning-panel" id="expectedWarning" hidden></div>
+      </div>
+    </section>
+
+    <section class="section" id="interpretation">
+      <div class="section-heading">
+        <p class="eyebrow">INTERPRETATION</p>
+        <h2>Association is not causation</h2>
+        <p class="section-copy">
+          A statistical relationship can be informative, but it
+          does not automatically explain why the variables are related.
+        </p>
+      </div>
+
+      <div class="interpretation-grid">
+        <article class="interpretation-card">
+          <span class="interpretation-symbol">≠</span>
+          <h3>Association</h3>
+          <p>
+            Statistical association means that the distribution
+            of one variable differs depending on the category
+            of the other. The Chi-square test can provide evidence
+            against the hypothesis of independence.
+          </p>
+        </article>
+
+        <article class="interpretation-card">
+          <span class="interpretation-symbol">→</span>
+          <h3>Causality</h3>
+          <p>
+            Causality means that changing one variable produces
+            a change in another. A contingency table alone cannot
+            establish this relationship. Other factors, such as
+            age, experience or external conditions, may influence
+            both variables.
+          </p>
+        </article>
+      </div>
+
+      <div class="final-note">
+        <h3>Final considerations</h3>
+        <p>
+          The contingency table provides a clear description of
+          how two categorical variables are distributed together.
+          Marginal and conditional frequencies help reveal patterns,
+          while expected frequencies provide the benchmark required
+          by the Chi-square test.
+        </p>
+        <p>
+          If the test statistic exceeds the critical value, the
+          null hypothesis of independence is rejected at the
+          selected significance level. This indicates evidence
+          of an association in the population, under the assumptions
+          of the test. If it does not exceed the critical value,
+          there is not enough evidence to reject independence.
+          This does not prove that the variables are independent.
+        </p>
+        <p>
+          Finally, statistical significance does not measure the
+          practical importance of a relationship and does not
+          establish causality. The context of the data and the
+          way observations were collected remain essential
+          for drawing meaningful conclusions.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Statistics 2026-27</span>
+    <span>Homework 07 · Statistical Independence</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
