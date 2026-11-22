@@ -1,0 +1,1060 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework 8 | Convergence and Bayesian Inference</title>
+
+    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="hw-header">
+    <a href="../index.html" class="back-link">← Statistics 2026-27</a>
+
+    <div class="header-content">
+        <span class="eyebrow">HOMEWORK 08</span>
+        <h1>Convergence & Bayesian Inference</h1>
+        <p>
+            From asymptotic behavior of random variables to updating
+            beliefs through statistical evidence.
+        </p>
+    </div>
+</header>
+
+<main class="hw-container">
+
+    <!-- INTRODUCTION -->
+
+    <section class="intro-section">
+        <div class="section-heading">
+            <span class="section-number">01</span>
+            <div>
+                <h2>Introduction</h2>
+                <p>Two fundamental ideas in probability and statistics</p>
+            </div>
+        </div>
+
+        <div class="intro-grid">
+            <article class="intro-card">
+                <div class="card-icon">∞</div>
+                <h3>Convergence</h3>
+                <p>
+                    Probability theory often studies what happens when the
+                    number of observations increases. Different definitions
+                    of convergence describe how random variables approach
+                    a limiting value or distribution.
+                </p>
+            </article>
+
+            <article class="intro-card">
+                <div class="card-icon">P</div>
+                <h3>Bayesian Inference</h3>
+                <p>
+                    Statistical inference allows us to draw conclusions
+                    about unknown quantities using observed data.
+                    Bayesian methods combine previous knowledge with
+                    new evidence through conditional probability.
+                </p>
+            </article>
+        </div>
+    </section>
+
+
+    <!-- PART 1 -->
+
+    <section class="content-section" id="convergence">
+
+        <div class="section-heading">
+            <span class="section-number">02</span>
+            <div>
+                <h2>Modes of Convergence</h2>
+                <p>How random variables approach a limit</p>
+            </div>
+        </div>
+
+        <p class="lead">
+            In probability theory, convergence describes the behavior
+            of a sequence of random variables as the number of observations
+            increases. Although several modes of convergence may appear
+            similar, they express different mathematical conditions
+            and provide different guarantees.
+        </p>
+
+        <div class="convergence-cards">
+
+            <article class="theory-card">
+                <h3>Convergence in Probability</h3>
+
+                <div class="equation">
+                    X<sub>n</sub> → X in probability
+                </div>
+
+                <p>
+                    A sequence converges in probability to a random variable
+                    X if the probability of deviating from X by more than
+                    any fixed positive amount becomes arbitrarily small.
+                </p>
+
+                <div class="equation">
+                    lim P(|X<sub>n</sub> − X| &gt; ε) = 0
+                    <br>
+                    <small>n → ∞, for every ε &gt; 0</small>
+                </div>
+
+                <p>
+                    This means that large errors become increasingly
+                    unlikely. However, it does not necessarily mean that
+                    every individual realization converges.
+                </p>
+
+                <div class="application">
+                    <strong>Typical application:</strong>
+                    The Weak Law of Large Numbers states that the sample
+                    mean converges in probability to the population mean
+                    under suitable assumptions.
+                </div>
+            </article>
+
+
+            <article class="theory-card">
+                <h3>Almost Sure Convergence</h3>
+
+                <div class="equation">
+                    X<sub>n</sub> → X almost surely
+                </div>
+
+                <p>
+                    Almost sure convergence means that the sequence
+                    converges to X for almost every outcome of the
+                    underlying probability space.
+                </p>
+
+                <div class="equation">
+                    P(lim X<sub>n</sub> = X) = 1
+                </div>
+
+                <p>
+                    In other words, the probability that convergence
+                    fails is zero. This is a stronger form of convergence
+                    than convergence in probability.
+                </p>
+
+                <div class="application">
+                    <strong>Typical application:</strong>
+                    The Strong Law of Large Numbers guarantees that,
+                    under suitable assumptions, sample averages converge
+                    almost surely to the expected value.
+                </div>
+            </article>
+
+
+            <article class="theory-card">
+                <h3>Mean-Square Convergence</h3>
+
+                <div class="equation">
+                    X<sub>n</sub> → X in L²
+                </div>
+
+                <p>
+                    Mean-square convergence requires the expected squared
+                    error to approach zero. It measures convergence
+                    through the average magnitude of the squared
+                    difference.
+                </p>
+
+                <div class="equation">
+                    E[(X<sub>n</sub> − X)²] → 0
+                </div>
+
+                <p>
+                    This condition controls the error not only in
+                    probability, but also through its second moment.
+                    It is particularly useful when variance and
+                    mean-squared error are important.
+                </p>
+
+                <div class="application">
+                    <strong>Typical application:</strong>
+                    Convergence of estimators in mean-square error,
+                    signal estimation, and results involving variance.
+                </div>
+            </article>
+
+
+            <article class="theory-card">
+                <h3>Convergence in Distribution</h3>
+
+                <div class="equation">
+                    X<sub>n</sub> →<sub>d</sub> X
+                </div>
+
+                <p>
+                    A sequence converges in distribution when its
+                    cumulative distribution functions converge at every
+                    continuity point of the limiting distribution.
+                </p>
+
+                <div class="equation">
+                    F<sub>n</sub>(x) → F(x)
+                </div>
+
+                <p>
+                    This form of convergence focuses on the overall
+                    distribution of the random variables rather than
+                    requiring the individual values to approach each other.
+                </p>
+
+                <div class="application">
+                    <strong>Typical application:</strong>
+                    The Central Limit Theorem describes the limiting
+                    distribution of standardized sums or sample means.
+                </div>
+            </article>
+
+        </div>
+
+
+        <!-- COMPARISON -->
+
+        <div class="comparison-panel">
+            <h3>How are these modes related?</h3>
+
+            <p>
+                Under the standard definitions, mean-square convergence
+                implies convergence in probability, and convergence
+                in probability implies convergence in distribution.
+                Almost sure convergence also implies convergence in
+                probability.
+            </p>
+
+            <div class="implication-diagram">
+
+                <div class="implication-node">
+                    <span>L²</span>
+                    <small>Mean-square</small>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="implication-node">
+                    <span>Probability</span>
+                    <small>In probability</small>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="implication-node">
+                    <span>Distribution</span>
+                    <small>In distribution</small>
+                </div>
+
+            </div>
+
+            <div class="secondary-implication">
+                <span>Almost sure convergence</span>
+                <span class="arrow">→</span>
+                <span>Convergence in probability</span>
+            </div>
+
+            <p class="note">
+                These implications cannot generally be reversed.
+                For example, convergence in probability does not
+                necessarily imply almost sure convergence, and
+                convergence in distribution does not generally imply
+                convergence in probability.
+            </p>
+        </div>
+
+
+        <!-- LLN -->
+
+        <div class="theory-block">
+            <h3>The Law of Large Numbers</h3>
+
+            <p>
+                The Law of Large Numbers explains why sample averages
+                become increasingly reliable as more observations
+                are collected. Suppose X₁, X₂, ..., Xₙ are independent
+                and identically distributed random variables with
+                finite expected value μ.
+            </p>
+
+            <div class="equation large-equation">
+                X̄<sub>n</sub> =
+                <span class="fraction">
+                    <span>1</span>
+                    <span>n</span>
+                </span>
+                ∑ X<sub>i</sub>
+            </div>
+
+            <p>
+                The sample mean is an estimator of the population
+                mean. The two main versions of the LLN differ
+                in the type of convergence they establish.
+            </p>
+
+            <div class="lln-grid">
+                <div>
+                    <h4>Weak Law</h4>
+                    <div class="equation">
+                        X̄<sub>n</sub> → μ
+                        <br>
+                        <small>in probability</small>
+                    </div>
+                    <p>
+                        The probability that the sample mean differs
+                        significantly from μ tends to zero.
+                    </p>
+                </div>
+
+                <div>
+                    <h4>Strong Law</h4>
+                    <div class="equation">
+                        X̄<sub>n</sub> → μ
+                        <br>
+                        <small>almost surely</small>
+                    </div>
+                    <p>
+                        With probability one, the observed sequence
+                        of sample averages converges to μ.
+                    </p>
+                </div>
+            </div>
+
+            <p>
+                For independent observations with finite variance,
+                the variance of the sample mean decreases as the
+                sample size grows:
+            </p>
+
+            <div class="equation">
+                Var(X̄<sub>n</sub>) =
+                <span class="fraction">
+                    <span>σ²</span>
+                    <span>n</span>
+                </span>
+            </div>
+
+            <p>
+                This relationship provides a quantitative explanation
+                for why averaging more independent observations
+                reduces variability.
+            </p>
+        </div>
+
+
+        <!-- CLT -->
+
+        <div class="theory-block">
+            <h3>The Central Limit Theorem</h3>
+
+            <p>
+                The Central Limit Theorem describes the distribution
+                of the sample mean when the sample size becomes large.
+                Even when the original observations are not normally
+                distributed, their standardized average tends toward
+                a normal distribution under suitable conditions.
+            </p>
+
+            <div class="equation large-equation">
+                <span class="fraction">
+                    <span>X̄<sub>n</sub> − μ</span>
+                    <span>σ / √n</span>
+                </span>
+                →<sub>d</sub> N(0,1)
+            </div>
+
+            <p>
+                Equivalently, for large n, the sample mean can be
+                approximated by a normal random variable with mean μ
+                and variance σ²/n.
+            </p>
+
+            <div class="equation">
+                X̄<sub>n</sub> ≈ N(μ, σ²/n)
+            </div>
+
+            <p>
+                The LLN tells us where the sample mean converges.
+                The CLT tells us how its distribution behaves
+                around that limiting value.
+            </p>
+        </div>
+
+
+        <!-- SQRT N -->
+
+        <div class="theory-block">
+            <h3>Why Does √n Appear So Often?</h3>
+
+            <p>
+                The square root of the sample size appears naturally
+                because variances add for independent random variables.
+                If the observations have variance σ², then the sum
+                of n independent observations has variance nσ².
+            </p>
+
+            <div class="equation">
+                Var(∑ X<sub>i</sub>) = nσ²
+            </div>
+
+            <p>
+                The standard deviation is the square root of variance.
+                Therefore, the standard deviation of the sum grows
+                proportionally to √n.
+            </p>
+
+            <div class="equation">
+                SD(∑ X<sub>i</sub>) = σ√n
+            </div>
+
+            <p>
+                When we divide the sum by n to calculate the sample
+                mean, its standard deviation becomes:
+            </p>
+
+            <div class="equation">
+                SD(X̄<sub>n</sub>) =
+                <span class="fraction">
+                    <span>σ√n</span>
+                    <span>n</span>
+                </span>
+                =
+                <span class="fraction">
+                    <span>σ</span>
+                    <span>√n</span>
+                </span>
+            </div>
+
+            <p>
+                This is why statistical estimation often improves
+                at a rate proportional to 1/√n. To reduce the standard
+                error by half, we generally need approximately
+                four times as many observations.
+            </p>
+
+            <div class="highlight-box">
+                <strong>Independence matters.</strong>
+                If observations are correlated, covariance terms
+                appear in the variance of their sum. The simple
+                nσ² relationship may no longer hold, and the
+                convergence rate can change.
+            </div>
+        </div>
+
+
+        <!-- INTERACTIVE SIMULATION -->
+
+        <div class="simulation-section">
+            <div class="simulation-header">
+                <div>
+                    <span class="eyebrow">INTERACTIVE EXPERIMENT</span>
+                    <h3>Observe the Central Limit Theorem</h3>
+                </div>
+            </div>
+
+            <p>
+                Generate repeated samples from a uniform distribution.
+                Each sample is averaged, and the resulting means
+                are plotted as a histogram. Increase the sample size
+                to observe how the distribution of the sample means
+                becomes more concentrated and more bell-shaped.
+            </p>
+
+            <div class="controls-grid">
+
+                <div class="control">
+                    <label for="sampleSize">
+                        Sample size (n)
+                    </label>
+                    <input
+                        type="range"
+                        id="sampleSize"
+                        min="2"
+                        max="100"
+                        value="10"
+                    >
+                    <div class="control-value">
+                        <span id="sampleSizeValue">10</span>
+                    </div>
+                </div>
+
+                <div class="control">
+                    <label for="repetitions">
+                        Number of repetitions
+                    </label>
+                    <input
+                        type="range"
+                        id="repetitions"
+                        min="100"
+                        max="5000"
+                        step="100"
+                        value="1000"
+                    >
+                    <div class="control-value">
+                        <span id="repetitionsValue">1000</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <button id="runSimulation" class="primary-button">
+                Run simulation
+            </button>
+
+            <div class="simulation-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Theoretical mean</span>
+                    <strong id="theoreticalMean">0.5000</strong>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat-label">Simulated mean</span>
+                    <strong id="simulatedMean">—</strong>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat-label">Theoretical standard error</span>
+                    <strong id="theoreticalSE">—</strong>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat-label">Simulated standard deviation</span>
+                    <strong id="simulatedSD">—</strong>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="cltChart"></canvas>
+            </div>
+
+            <p class="chart-caption">
+                The original distribution is Uniform(0,1).
+                Its population mean is 0.5 and variance is 1/12.
+                The red curve represents the normal approximation.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- PART 2 -->
+
+    <section class="content-section" id="bayesian">
+
+        <div class="section-heading">
+            <span class="section-number">03</span>
+            <div>
+                <h2>Conditional Probability & Bayesian Inference</h2>
+                <p>Updating knowledge using observed evidence</p>
+            </div>
+        </div>
+
+        <p class="lead">
+            Conditional probability describes the probability of an
+            event occurring when another event is already known
+            to have occurred. In statistics, it is a fundamental
+            tool for interpreting evidence, modeling uncertainty
+            and making decisions.
+        </p>
+
+
+        <!-- CONDITIONAL PROBABILITY -->
+
+        <div class="theory-block">
+            <h3>Conditional Probability</h3>
+
+            <p>
+                If A and B are events and P(B) &gt; 0, the conditional
+                probability of A given B is defined as:
+            </p>
+
+            <div class="equation large-equation">
+                P(A | B) =
+                <span class="fraction">
+                    <span>P(A ∩ B)</span>
+                    <span>P(B)</span>
+                </span>
+            </div>
+
+            <p>
+                This expression restricts the sample space to
+                the outcomes in which B occurs. Within that
+                restricted space, we evaluate how likely A is.
+            </p>
+
+            <div class="equation">
+                P(A ∩ B) = P(A | B)P(B)
+            </div>
+
+            <p>
+                Two events are independent if knowing that one
+                occurred does not change the probability of the other:
+            </p>
+
+            <div class="equation">
+                P(A | B) = P(A)
+            </div>
+
+            <p>
+                Equivalently, when the events are independent,
+                P(A ∩ B) = P(A)P(B).
+            </p>
+        </div>
+
+
+        <!-- BAYES -->
+
+        <div class="theory-block">
+            <h3>Bayes' Theorem</h3>
+
+            <p>
+                Bayes' theorem reverses conditional probabilities.
+                It allows us to calculate the probability of a
+                hypothesis given observed evidence, even when
+                the probability of the evidence given the hypothesis
+                is the quantity that is initially known.
+            </p>
+
+            <div class="equation large-equation">
+                P(H | E) =
+                <span class="fraction">
+                    <span>P(E | H)P(H)</span>
+                    <span>P(E)</span>
+                </span>
+            </div>
+
+            <p>
+                When several hypotheses are possible, the denominator
+                can be expanded using the law of total probability:
+            </p>
+
+            <div class="equation">
+                P(E) = ∑ P(E | H<sub>i</sub>)P(H<sub>i</sub>)
+            </div>
+
+            <p>
+                This ensures that the posterior probabilities
+                are properly normalized and sum to one.
+            </p>
+        </div>
+
+
+        <!-- BAYES COMPONENTS -->
+
+        <div class="bayes-components">
+
+            <article class="bayes-card prior">
+                <span class="component-label">01</span>
+                <h3>Prior Probability</h3>
+                <p>
+                    The prior represents the probability assigned
+                    to a hypothesis before considering the current
+                    evidence.
+                </p>
+                <div class="equation">
+                    P(H)
+                </div>
+                <p>
+                    It may come from historical data, previous
+                    experiments, expert knowledge or an explicitly
+                    chosen statistical model.
+                </p>
+            </article>
+
+            <article class="bayes-card likelihood">
+                <span class="component-label">02</span>
+                <h3>Likelihood</h3>
+                <p>
+                    The likelihood describes how compatible
+                    the observed evidence is with a hypothesis.
+                </p>
+                <div class="equation">
+                    P(E | H)
+                </div>
+                <p>
+                    A hypothesis that makes the observed data
+                    more likely receives greater support
+                    relative to competing hypotheses.
+                </p>
+            </article>
+
+            <article class="bayes-card posterior">
+                <span class="component-label">03</span>
+                <h3>Posterior Probability</h3>
+                <p>
+                    The posterior represents the updated probability
+                    of the hypothesis after incorporating the evidence.
+                </p>
+                <div class="equation">
+                    P(H | E)
+                </div>
+                <p>
+                    It combines the prior and the likelihood,
+                    providing a revised assessment of uncertainty.
+                </p>
+            </article>
+
+        </div>
+
+
+        <!-- BAYESIAN INTERPRETATION -->
+
+        <div class="theory-block">
+            <h3>How Bayesian Updating Works</h3>
+
+            <div class="bayes-flow">
+
+                <div class="flow-item">
+                    <strong>Prior</strong>
+                    <span>Initial belief</span>
+                </div>
+
+                <div class="flow-arrow">+</div>
+
+                <div class="flow-item">
+                    <strong>Evidence</strong>
+                    <span>Observed data</span>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-item result-flow">
+                    <strong>Posterior</strong>
+                    <span>Updated belief</span>
+                </div>
+
+            </div>
+
+            <p>
+                The posterior distribution becomes the updated
+                knowledge about the unknown parameter or hypothesis.
+                In sequential Bayesian analysis, this posterior
+                can be used as the prior for a subsequent observation.
+            </p>
+
+            <p>
+                Bayesian inference is particularly useful when
+                the available data are limited, when previous
+                information is relevant, or when uncertainty
+                must be represented explicitly.
+            </p>
+        </div>
+
+
+        <!-- EXAMPLE 1 -->
+
+        <div class="example-section">
+            <div class="example-heading">
+                <span class="example-tag">EXAMPLE 01</span>
+                <h3>Medical Testing</h3>
+            </div>
+
+            <p>
+                Consider a medical condition that affects a small
+                fraction of the population. A test can detect most
+                affected individuals, but it may also produce
+                false positive results.
+            </p>
+
+            <p>
+                A positive test does not automatically imply
+                that the person has the condition. The prior
+                prevalence and the test accuracy must both
+                be considered.
+            </p>
+
+            <div class="equation">
+                P(D | +) =
+                <span class="fraction">
+                    <span>P(+ | D)P(D)</span>
+                    <span>P(+)</span>
+                </span>
+            </div>
+
+            <div class="highlight-box">
+                <strong>Interpretation:</strong>
+                Even a highly accurate test can produce a relatively
+                low posterior probability when the condition
+                is rare. This is a consequence of the base-rate
+                effect.
+            </div>
+        </div>
+
+
+        <!-- INTERACTIVE BAYES CALCULATOR -->
+
+        <div class="bayes-calculator">
+
+            <div class="simulation-header">
+                <div>
+                    <span class="eyebrow">INTERACTIVE CALCULATOR</span>
+                    <h3>Medical Test: Bayesian Update</h3>
+                </div>
+            </div>
+
+            <p>
+                Adjust the prevalence of the condition and the
+                test characteristics. The calculator estimates
+                the probability of having the condition after
+                a positive test result.
+            </p>
+
+            <div class="bayes-controls">
+
+                <div class="control">
+                    <label for="prevalence">
+                        Prevalence
+                    </label>
+                    <input
+                        type="range"
+                        id="prevalence"
+                        min="0.1"
+                        max="50"
+                        step="0.1"
+                        value="1"
+                    >
+                    <div class="control-value">
+                        <span id="prevalenceValue">1.0%</span>
+                    </div>
+                </div>
+
+                <div class="control">
+                    <label for="sensitivity">
+                        Sensitivity
+                    </label>
+                    <input
+                        type="range"
+                        id="sensitivity"
+                        min="50"
+                        max="100"
+                        step="1"
+                        value="99"
+                    >
+                    <div class="control-value">
+                        <span id="sensitivityValue">99%</span>
+                    </div>
+                </div>
+
+                <div class="control">
+                    <label for="specificity">
+                        Specificity
+                    </label>
+                    <input
+                        type="range"
+                        id="specificity"
+                        min="50"
+                        max="100"
+                        step="1"
+                        value="95"
+                    >
+                    <div class="control-value">
+                        <span id="specificityValue">95%</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bayes-result">
+
+                <div class="result-main">
+                    <span class="result-label">
+                        Probability of condition after a positive result
+                    </span>
+                    <strong id="posteriorResult">—</strong>
+                    <div class="result-bar">
+                        <div id="posteriorBar"></div>
+                    </div>
+                </div>
+
+                <div class="result-details">
+                    <div>
+                        <span>Prior</span>
+                        <strong id="priorResult">—</strong>
+                    </div>
+
+                    <div>
+                        <span>Positive likelihood</span>
+                        <strong id="likelihoodResult">—</strong>
+                    </div>
+
+                    <div>
+                        <span>Probability of a positive test</span>
+                        <strong id="positiveResult">—</strong>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="population-example">
+                <h4>What happens among 10,000 people?</h4>
+
+                <div class="population-grid">
+                    <div>
+                        <span>True positives</span>
+                        <strong id="truePositiveCount">—</strong>
+                    </div>
+
+                    <div>
+                        <span>False positives</span>
+                        <strong id="falsePositiveCount">—</strong>
+                    </div>
+
+                    <div>
+                        <span>Total positive tests</span>
+                        <strong id="totalPositiveCount">—</strong>
+                    </div>
+                </div>
+
+                <p id="populationExplanation"></p>
+            </div>
+
+        </div>
+
+
+        <!-- EXAMPLE 2 -->
+
+        <div class="example-section">
+            <div class="example-heading">
+                <span class="example-tag">EXAMPLE 02</span>
+                <h3>Cybersecurity: Suspicious Activity</h3>
+            </div>
+
+            <p>
+                Bayesian reasoning can also be applied to cybersecurity.
+                Suppose an event is flagged by a detection system.
+                We want to estimate whether the event is actually
+                malicious, given the alert.
+            </p>
+
+            <p>
+                The prior probability reflects the baseline rate
+                of malicious activity. The likelihood represents
+                how frequently the detector produces an alert
+                when an attack is present, compared with when
+                the activity is benign.
+            </p>
+
+            <div class="equation">
+                P(M | A) =
+                <span class="fraction">
+                    <span>P(A | M)P(M)</span>
+                    <span>P(A | M)P(M) + P(A | ¬M)P(¬M)</span>
+                </span>
+            </div>
+
+            <p>
+                This distinction is important in operational
+                security. A detector may have a high true-positive
+                rate but still generate many false alerts if
+                malicious activity is uncommon.
+            </p>
+
+            <div class="highlight-box">
+                <strong>Practical consequence:</strong>
+                Alerts should be interpreted in context. Additional
+                evidence, such as unusual login behavior, known
+                threat indicators or correlated events, can
+                substantially change the posterior probability.
+            </div>
+        </div>
+
+
+        <!-- ADVANTAGES / LIMITATIONS -->
+
+        <div class="theory-block">
+            <h3>Advantages and Limitations of Bayesian Inference</h3>
+
+            <div class="pros-cons">
+
+                <div class="pros">
+                    <h4>Advantages</h4>
+                    <ul>
+                        <li>Combines prior knowledge with observed evidence.</li>
+                        <li>Provides a direct probabilistic interpretation of uncertainty.</li>
+                        <li>Can be updated as new observations become available.</li>
+                        <li>Useful when data are limited or when historical information matters.</li>
+                        <li>Supports decision-making by evaluating uncertainty and risk.</li>
+                    </ul>
+                </div>
+
+                <div class="cons">
+                    <h4>Limitations</h4>
+                    <ul>
+                        <li>Results may depend on the choice of prior.</li>
+                        <li>Incorrect assumptions about the likelihood can lead to misleading conclusions.</li>
+                        <li>Complex models may require expensive computational methods.</li>
+                        <li>Results must be interpreted carefully when the model does not represent reality.</li>
+                        <li>Prior assumptions should be transparent and justified.</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <p>
+                Bayesian analysis does not remove uncertainty.
+                Instead, it provides a structured way to combine
+                different sources of information and express
+                how strongly the available evidence supports
+                competing hypotheses.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- CONCLUSION -->
+
+    <section class="conclusion-section">
+
+        <div class="section-heading">
+            <span class="section-number">04</span>
+            <div>
+                <h2>Conclusions</h2>
+            </div>
+        </div>
+
+        <p>
+            Modes of convergence describe different ways in which
+            random variables approach limiting values or distributions.
+            The Law of Large Numbers establishes the long-run stability
+            of sample averages, while the Central Limit Theorem
+            explains their behavior around the expected value.
+        </p>
+
+        <p>
+            The appearance of √n is closely connected to the
+            accumulation of variance under independence and
+            provides the characteristic rate at which the
+            uncertainty of sample averages decreases.
+        </p>
+
+        <p>
+            Conditional probability and Bayes' theorem provide
+            the mathematical foundation for updating uncertainty
+            in light of new evidence. By combining prior
+            probabilities and likelihoods, Bayesian inference
+            produces posterior probabilities that can be used
+            in statistical reasoning and practical decision-making.
+        </p>
+
+    </section>
+
+</main>
+
+
+<footer class="hw-footer">
+    <a href="../index.html">Statistics 2026-27</a>
+    <span>Homework 08</span>
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
